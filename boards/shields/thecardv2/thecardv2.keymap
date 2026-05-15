@@ -1,29 +1,154 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 
-#define K00 0
-#define K01 1
-#define K02 2
-#define K03 3
-#define K04 4
-#define K05 5
-#define K06 6
-#define K07 7
-#define K08 8
-#define K09 9
-#define K10 10
-#define K11 11
-#define K12 12
+// Taipo positions, mapped onto the first 10 TheCardV2 physical positions.
+#define TI 0
+#define TM 1
+#define TR 2
+#define TP 3
+#define BI 4
+#define BM 5
+#define BR 6
+#define BP 7
+#define OT 8
+#define IT 9
 
 / {
+    behaviors {
+        // Enables holding the first mod-tap key by performing a tap-release-hold sequence.
+        qt: quick_tap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "QUICK_TAP";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            bindings = <&kp>, <&kp>;
+        };
+    };
+
+    #define COMBO(NAME, BINDINGS, KEYPOS) \
+    combo_##NAME { \
+        timeout-ms = <50>; \
+        bindings = <BINDINGS>; \
+        key-positions = <KEYPOS>; \
+    };
+
+    combos {
+        compatible = "zmk,combos";
+        COMBO(2,&kp LS(E),BI OT)
+        COMBO(4,&kp LS(T),BM OT)
+        COMBO(6,&kp LS(O),BR OT)
+        COMBO(8,&kp LS(A),BP OT)
+        COMBO(10,&kp LPAR,BI IT)
+        COMBO(12,&kp LBKT,BM IT)
+        COMBO(14,&kp LBRC,BR IT)
+        COMBO(16,&kp LT,BP IT)
+        COMBO(18,&kp LS(I),OT TI)
+        COMBO(20,&kp LS(N),OT TM)
+        COMBO(22,&kp LS(S),OT TR)
+        COMBO(24,&kp LS(R),OT TP)
+        COMBO(26,&kp RPAR,IT TI)
+        COMBO(28,&kp RBKT,IT TM)
+        COMBO(30,&kp RBRC,IT TR)
+        COMBO(32,&kp GT,IT TP)
+        COMBO(34,&kp H,BI BM)
+        COMBO(36,&kp L,BP BR)
+        COMBO(38,&kp Y,TI TM)
+        COMBO(40,&kp B,TP TR)
+        COMBO(42,&kp LS(H),BI BM OT)
+        COMBO(44,&kp LS(L),BP BR OT)
+        COMBO(46,&kp LS(Y),OT TI TM)
+        COMBO(48,&kp LS(B),OT TP TR)
+        COMBO(50,&kp N0,BI BM IT)
+        COMBO(52,&kp N4,BP BR IT)
+        COMBO(54,&kp N5,IT TI TM)
+        COMBO(56,&kp N9,IT TP TR)
+        COMBO(58,&kp G,TI TP)
+        COMBO(60,&kp U,BM BR)
+        COMBO(62,&kp D,BI BP)
+        COMBO(64,&kp P,TM TR)
+        COMBO(66,&kp LS(G),OT TI TP)
+        COMBO(68,&kp LS(U),BM BR OT)
+        COMBO(70,&kp LS(D),BI BP OT)
+        COMBO(72,&kp LS(P),OT TM TR)
+        COMBO(74,&kp HASH,IT TI TP)
+        COMBO(76,&kp N2,BM BR IT)
+        COMBO(78,&kp AT,BI BP IT)
+        COMBO(80,&kp N7,IT TM TR)
+        COMBO(82,&kp C,BI BR)
+        COMBO(84,&kp Q,BM BP)
+        COMBO(86,&kp F,TI TR)
+        COMBO(88,&kp Z,TM TP)
+        COMBO(90,&kp LS(C),BI BR OT)
+        COMBO(92,&kp LS(Q),BM BP OT)
+        COMBO(94,&kp LS(F),OT TI TR)
+        COMBO(96,&kp LS(Z),OT TM TP)
+        COMBO(98,&kp N1,BI BR IT)
+        COMBO(100,&kp N3,BM BP IT)
+        COMBO(102,&kp N6,IT TI TR)
+        COMBO(104,&kp N8,IT TM TP)
+        COMBO(106,&kp V,BI TR)
+        COMBO(108,&kp X,BM TP)
+        COMBO(110,&kp K,BR TI)
+        COMBO(112,&kp J,BP TM)
+        COMBO(114,&kp LS(V),BI OT TR)
+        COMBO(116,&kp LS(X),BM OT TP)
+        COMBO(118,&kp LS(K),BR OT TI)
+        COMBO(120,&kp LS(J),BP OT TM)
+        COMBO(122,&kp STAR,BI IT TR)
+        COMBO(124,&kp CARET,BM IT TP)
+        COMBO(126,&kp PLUS,BR IT TI)
+        COMBO(128,&kp EQUAL,BP IT TM)
+        COMBO(130,&kp MINUS,BR TM)
+        COMBO(132,&kp W,BP TI)
+        COMBO(134,&kp M,BI TP)
+        COMBO(136,&kp FSLH,BM TR)
+        COMBO(138,&kp UNDER,BR OT TM)
+        COMBO(140,&kp LS(W),BP OT TI)
+        COMBO(142,&kp LS(M),BI OT TP)
+        COMBO(144,&kp BSLH,BM OT TR)
+        COMBO(146,&kp PRCNT,BR IT TM)
+        COMBO(148,&kp AMPS,BP IT TI)
+        COMBO(150,&kp DLLR,BI IT TP)
+        COMBO(152,&kp PIPE,BM IT TR)
+        COMBO(154,&kp SQT,BP TR)
+        COMBO(156,&kp SEMI,BR TP)
+        COMBO(158,&kp QMARK,BM TI)
+        COMBO(160,&kp COMMA,BI TM)
+        COMBO(162,&kp DQT,BP OT TR)
+        COMBO(164,&kp COLON,BR OT TP)
+        COMBO(166,&kp EXCL,BM OT TI)
+        COMBO(168,&kp DOT,BI OT TM)
+        COMBO(170,&kp GRAVE,BP IT TR)
+        COMBO(172,&kp TILDE,BI IT TM)
+        COMBO(174,&sk LEFT_CONTROL,BP TP)
+        COMBO(176,&sk LEFT_ALT,BR TR)
+        COMBO(178,&sk LEFT_GUI,BM TM)
+        COMBO(180,&sk LEFT_SHIFT,BI TI)
+        COMBO(182,&kp RIGHT,BP TP OT)
+        COMBO(184,&kp UP,BR TR OT)
+        COMBO(186,&kp DOWN,BM TM OT)
+        COMBO(188,&kp LEFT,BI TI OT)
+        COMBO(190,&kp PG_UP,BP TP IT)
+        COMBO(192,&kp HOME,BR TR IT)
+        COMBO(194,&kp END,BM TM IT)
+        COMBO(196,&kp PG_DN,BI TI IT)
+        COMBO(198,&kp ENTER,BI BM BR)
+        COMBO(200,&kp TAB,TI TM TR)
+        COMBO(202,&kp ESC,BI BM BR OT)
+        COMBO(204,&kp DEL,TI TM TR OT)
+        COMBO(206,&sk RALT,BI BM BR IT)
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
             bindings = <
-                &kp Q      &kp W      &kp E      &kp R
-                &kp A      &kp S      &kp D      &kp F
-                &kp Z      &kp X      &kp C      &kp V      &kp SPACE
+                &kp I      &kp N      &kp S      &kp R
+                &kp E      &kp T      &kp O      &kp A
+                &kp SPACE  &kp BKSP   &none      &none      &none
             >;
         };
     };
