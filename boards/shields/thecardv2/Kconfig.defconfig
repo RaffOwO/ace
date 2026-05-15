@@ -1,0 +1,6 @@
+if SHIELD_THECARDV2
+
+config ZMK_KEYBOARD_NAME
+    default "TheCardV2"
+
+endif # SHIELD_THECARDV2

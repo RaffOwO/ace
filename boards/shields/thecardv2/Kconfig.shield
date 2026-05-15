@@ -1,0 +1,2 @@
+config SHIELD_THECARDV2
+    def_bool $(shields_list_contains,thecardv2)

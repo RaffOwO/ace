@@ -1,0 +1,7 @@
+/ {
+    thecardv2_layout: physical_layout_0 {
+        compatible = "zmk,physical-layout";
+        display-name = "TheCardV2 Layout";
+        transform = <&thecardv2_transform>;
+    };
+};

@@ -1,0 +1,10 @@
+file_format: "1"
+id: thecardv2
+name: TheCardV2
+type: shield
+url: https://github.com/RaffOwO/zmk-config-thecardv2
+requires: [pro_micro]
+features:
+  - keys
+siblings:
+  - thecardv2
