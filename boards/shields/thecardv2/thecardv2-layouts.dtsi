@@ -1,3 +1,5 @@
+#include <physical_layouts.dtsi>
+
 / {
     thecardv2_layout: physical_layout_0 {
         compatible = "zmk,physical-layout";
