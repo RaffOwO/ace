@@ -33,6 +33,13 @@
             double-tap-ms = <250>;
             release-after-ms = <3000>;
         };
+
+        k0_nav_base: k0_nav_base {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <250>;
+            bindings = <&to NAV>, <&to BASE>;
+        };
     };
 
     #define COMBO_GLOBAL(NAME, BINDINGS, KEYPOS) \
@@ -50,15 +57,23 @@
         layers = <LAYERS>; \
     };
 
+    #define COMBO_ACCESS(NAME, BINDINGS, KEYPOS) \
+    combo_##NAME { \
+        timeout-ms = <500>; \
+        bindings = <BINDINGS>; \
+        key-positions = <KEYPOS>; \
+    };
+
     combos {
         compatible = "zmk,combos";
 
         COMBO_GLOBAL(tab, &kp TAB, K3 K2 K1)
         COMBO_GLOBAL(enter, &kp ENTER, K7 K6 K5)
 
-        COMBO_LAYER(base_sym, &to SYM, K12 K0, BASE)
-        COMBO_LAYER(base_mouse, &to MOUSE, K11 K0, BASE)
-        COMBO_LAYER(base_fun, &to FUN, K10 K0, BASE)
+        COMBO_ACCESS(access_num, &to NUM, K12 K0)
+        COMBO_ACCESS(access_sym, &to SYM, K11 K0)
+        COMBO_ACCESS(access_mouse, &to MOUSE, K10 K0)
+        COMBO_ACCESS(access_fun, &to FUN, K8 K0)
 
         COMBO_LAYER(alpha_d, &kp D, K3 K7, BASE)
         COMBO_LAYER(alpha_l, &kp L, K2 K6, BASE)
@@ -159,39 +174,39 @@
 
         base_layer {
             bindings = <
-                &to NAV              &kp S      &kp N      &kp I
+                &k0_nav_base         &kp S      &kp N      &kp I
                 &kp A                &kp O      &kp T      &kp E
-                &skp LEFT_CONTROL    &skp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL    &skp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
         num_layer {
             bindings = <
-                &to BASE          &kp N9     &kp N8     &kp N7
+                &k0_nav_base      &kp N9     &kp N8     &kp N7
                 &kp N0            &kp N3     &kp N2     &kp N1
-                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
         sym_layer {
             bindings = <
-                &to BASE          &kp RPAR   &kp COLON  &kp LPAR
+                &k0_nav_base      &kp RPAR   &kp COLON  &kp LPAR
                 &kp SEMI          &kp RBKT   &kp EQUAL  &kp LBKT
-                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
         nav_layer {
             bindings = <
-                &to BASE          &kp END    &kp UP     &kp HOME
+                &k0_nav_base      &kp END    &kp UP     &kp HOME
                 &kp PG_UP         &kp RIGHT  &kp DOWN   &kp LEFT
-                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
         mouse_layer {
             bindings = <
-                &to BASE          &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
+                &k0_nav_base      &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
                 &mkp MCLK         &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
                 &skp LEFT_CONTROL &skp LEFT_GUI  &skp LEFT_ALT  &mkp RCLK     &mkp LCLK
             >;
@@ -199,9 +214,9 @@
 
         fun_layer {
             bindings = <
-                &to BASE          &kp F9     &kp F8     &kp F7
+                &k0_nav_base      &kp F9     &kp F8     &kp F7
                 &kp F10           &kp F3     &kp F2     &kp F1
-                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
     };
