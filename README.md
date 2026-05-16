@@ -4,7 +4,7 @@ This is the ZMK firmware config for TheCardV2.
 
 ## Build Target
 
-- Board: `nice_nano`
+- Board: `nice_nano_v2`
 - Shield: `thecardv2`
 
 ## Local Build
@@ -18,7 +18,7 @@ zmk west update
 Then build with West:
 
 ```powershell
-& "C:\Users\raffa\AppData\Roaming\uv\tools\zmk\Scripts\python.exe" -m west build -s zmk/app -d build/thecardv2 -b nice_nano -- -DSHIELD=thecardv2 -DZMK_CONFIG="E:/Projects/TheCardv2/zmk-config-thecardv2/config" -DZMK_EXTRA_MODULES="E:/Projects/TheCardv2/zmk-config-thecardv2"
+& "C:\Users\raffa\AppData\Roaming\uv\tools\zmk\Scripts\python.exe" -m west build -s zmk/app -d build/thecardv2 -b nice_nano_v2 -- -DSHIELD=thecardv2 -DZMK_CONFIG="E:/Projects/TheCardv2/zmk-config-thecardv2/config" -DZMK_EXTRA_MODULES="E:/Projects/TheCardv2/zmk-config-thecardv2"
 ```
 
 Current local blocker: CMake is not installed or not on PATH.
