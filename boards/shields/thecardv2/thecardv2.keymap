@@ -1,5 +1,7 @@
 #include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/pointing.h>
 
 #define BASE 0
@@ -8,6 +10,7 @@
 #define NAV 3
 #define MOUSE 4
 #define FUN 5
+#define SYS 6
 
 #define K0 0
 #define K1 1
@@ -54,14 +57,14 @@
 
     #define COMBO_GLOBAL(NAME, BINDINGS, KEYPOS) \
     combo_##NAME { \
-        timeout-ms = <25>; \
+        timeout-ms = <20>; \
         bindings = <BINDINGS>; \
         key-positions = <KEYPOS>; \
     };
 
     #define COMBO_LAYER(NAME, BINDINGS, KEYPOS, LAYERS) \
     combo_##NAME { \
-        timeout-ms = <25>; \
+        timeout-ms = <20>; \
         bindings = <BINDINGS>; \
         key-positions = <KEYPOS>; \
         layers = <LAYERS>; \
@@ -73,10 +76,10 @@
         COMBO_GLOBAL(tab, &kp TAB, K3 K2 K1)
         COMBO_GLOBAL(enter, &kp ENTER, K7 K6 K5)
 
-        COMBO_GLOBAL(access_num, &to NUM, K12 K0)
-        COMBO_GLOBAL(access_sym, &to SYM, K11 K0)
-        COMBO_GLOBAL(access_mouse, &to MOUSE, K10 K0)
-        COMBO_GLOBAL(access_fun, &to FUN, K8 K0)
+        COMBO_GLOBAL(access_sym, &to SYM, K12 K0)
+        COMBO_GLOBAL(access_mouse, &to MOUSE, K11 K0)
+        COMBO_GLOBAL(access_fun, &to FUN, K10 K0)
+        COMBO_GLOBAL(access_sys, &to SYS, K8 K0)
 
         COMBO_LAYER(alpha_d, &kp D, K3 K7, BASE)
         COMBO_LAYER(alpha_l, &kp L, K2 K6, BASE)
@@ -167,7 +170,7 @@
             bindings = <
                 &k0_nav_base         &kp S      &kp N      &kp I
                 &kp A                &kp O      &kp T      &kp E
-                &skp LEFT_CONTROL    &oskp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL    &oskp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -175,7 +178,7 @@
             bindings = <
                 &k0_nav_base      &kp N9     &kp N8     &kp N7
                 &kp N0            &kp N3     &kp N2     &kp N1
-                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -183,7 +186,7 @@
             bindings = <
                 &k0_nav_base      &kp RPAR   &kp COLON  &kp LPAR
                 &kp SEMI          &kp RBKT   &kp EQUAL  &kp LBKT
-                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -191,7 +194,7 @@
             bindings = <
                 &k0_nav_base      &kp END    &kp UP     &kp HOME
                 &kp PG_UP         &kp RIGHT  &kp DOWN   &kp LEFT
-                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -207,7 +210,15 @@
             bindings = <
                 &k0_nav_base      &kp F9     &kp F8     &kp F7
                 &kp F10           &kp F3     &kp F2     &kp F1
-                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+            >;
+        };
+
+        sys_layer {
+            bindings = <
+                &to BASE       &bt BT_CLR    &bt BT_SEL 4 &bt BT_SEL 3
+                &out OUT_TOG   &bt BT_SEL 2  &bt BT_SEL 1 &bt BT_SEL 0
+                &trans         &trans        &trans       &trans       &trans
             >;
         };
     };
