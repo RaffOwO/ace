@@ -34,6 +34,16 @@
             release-after-ms = <3000>;
         };
 
+        oskp: os_superkey {
+            compatible = "zmk,behavior-superkey";
+            display-name = "OS SuperKey";
+            #binding-cells = <1>;
+            tapping-term-ms = <150>;
+            double-tap-ms = <200>;
+            release-after-ms = <3000>;
+            tap-keycode = <LEFT_GUI>;
+        };
+
         k0_nav_base: k0_nav_base {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
@@ -44,24 +54,17 @@
 
     #define COMBO_GLOBAL(NAME, BINDINGS, KEYPOS) \
     combo_##NAME { \
-        timeout-ms = <50>; \
+        timeout-ms = <25>; \
         bindings = <BINDINGS>; \
         key-positions = <KEYPOS>; \
     };
 
     #define COMBO_LAYER(NAME, BINDINGS, KEYPOS, LAYERS) \
     combo_##NAME { \
-        timeout-ms = <50>; \
+        timeout-ms = <25>; \
         bindings = <BINDINGS>; \
         key-positions = <KEYPOS>; \
         layers = <LAYERS>; \
-    };
-
-    #define COMBO_ACCESS(NAME, BINDINGS, KEYPOS) \
-    combo_##NAME { \
-        timeout-ms = <500>; \
-        bindings = <BINDINGS>; \
-        key-positions = <KEYPOS>; \
     };
 
     combos {
@@ -70,10 +73,10 @@
         COMBO_GLOBAL(tab, &kp TAB, K3 K2 K1)
         COMBO_GLOBAL(enter, &kp ENTER, K7 K6 K5)
 
-        COMBO_ACCESS(access_num, &to NUM, K12 K0)
-        COMBO_ACCESS(access_sym, &to SYM, K11 K0)
-        COMBO_ACCESS(access_mouse, &to MOUSE, K10 K0)
-        COMBO_ACCESS(access_fun, &to FUN, K8 K0)
+        COMBO_GLOBAL(access_num, &to NUM, K12 K0)
+        COMBO_GLOBAL(access_sym, &to SYM, K11 K0)
+        COMBO_GLOBAL(access_mouse, &to MOUSE, K10 K0)
+        COMBO_GLOBAL(access_fun, &to FUN, K8 K0)
 
         COMBO_LAYER(alpha_d, &kp D, K3 K7, BASE)
         COMBO_LAYER(alpha_l, &kp L, K2 K6, BASE)
@@ -130,28 +133,16 @@
         COMBO_LAYER(sym_sqt, &kp SQT, K4 K7, SYM)
         COMBO_LAYER(sym_grave, &kp GRAVE, K3 K6, SYM)
 
-        COMBO_LAYER(nav_line_left, &kp HOME, K3 K7, NAV)
-        COMBO_LAYER(nav_line_right, &kp END, K1 K5, NAV)
-        COMBO_LAYER(nav_scroll_up, &msc SCRL_UP, K2 K3, NAV)
-        COMBO_LAYER(nav_scroll_down, &msc SCRL_DOWN, K1 K2, NAV)
-        COMBO_LAYER(nav_word_left, &kp LC(LEFT), K6 K7, NAV)
-        COMBO_LAYER(nav_word_right, &kp LC(RIGHT), K5 K6, NAV)
-        COMBO_LAYER(nav_esc, &kp ESC, K1 K3, NAV)
-        COMBO_LAYER(nav_del, &kp DEL, K2 K6, NAV)
-        COMBO_LAYER(nav_pgdn, &kp PG_DN, K5 K7, NAV)
-        COMBO_LAYER(nav_caps, &kp CAPS, K2 K7, NAV)
-        COMBO_LAYER(nav_ins, &kp INS, K2 K5, NAV)
-        COMBO_LAYER(nav_app, &kp K_APP, K2 K4, NAV)
+        COMBO_LAYER(nav_pgdn, &kp PG_DN, K4 K12, NAV)
+        COMBO_LAYER(nav_esc, &kp ESC, K4 K11, NAV)
+        COMBO_LAYER(nav_del, &kp DEL, K4 K10, NAV)
+        COMBO_LAYER(nav_caps, &kp CAPS, K4 K9, NAV)
+        COMBO_LAYER(nav_ins, &kp INS, K4 K8, NAV)
 
-        COMBO_LAYER(mouse_left_fast, &mmv MOVE_LEFT, K3 K7, MOUSE)
-        COMBO_LAYER(mouse_down_fast, &mmv MOVE_DOWN, K2 K6, MOUSE)
-        COMBO_LAYER(mouse_right_fast, &mmv MOVE_RIGHT, K1 K5, MOUSE)
-        COMBO_LAYER(mouse_scroll_left, &msc SCRL_LEFT, K6 K7, MOUSE)
-        COMBO_LAYER(mouse_scroll_right, &msc SCRL_RIGHT, K5 K6, MOUSE)
-        COMBO_LAYER(mouse_scroll_up_fast, &msc SCRL_UP, K5 K7, MOUSE)
-        COMBO_LAYER(mouse_drag, &mkp LCLK, K4 K5, MOUSE)
-        COMBO_LAYER(mouse_btn4, &mkp MB4, K2 K7, MOUSE)
-        COMBO_LAYER(mouse_scroll_down_fast, &msc SCRL_DOWN, K2 K5, MOUSE)
+        COMBO_LAYER(mouse_drag, &mkp LCLK, K4 K12, MOUSE)
+        COMBO_LAYER(mouse_btn4, &mkp MB4, K4 K11, MOUSE)
+        COMBO_LAYER(mouse_scroll_up_fast, &msc SCRL_UP, K4 K10, MOUSE)
+        COMBO_LAYER(mouse_scroll_down_fast, &msc SCRL_DOWN, K4 K8, MOUSE)
 
         COMBO_LAYER(fun_f4, &kp F4, K3 K7, FUN)
         COMBO_LAYER(fun_f5, &kp F5, K2 K6, FUN)
@@ -176,7 +167,7 @@
             bindings = <
                 &k0_nav_base         &kp S      &kp N      &kp I
                 &kp A                &kp O      &kp T      &kp E
-                &skp LEFT_CONTROL    &skp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL    &oskp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -184,7 +175,7 @@
             bindings = <
                 &k0_nav_base      &kp N9     &kp N8     &kp N7
                 &kp N0            &kp N3     &kp N2     &kp N1
-                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -192,7 +183,7 @@
             bindings = <
                 &k0_nav_base      &kp RPAR   &kp COLON  &kp LPAR
                 &kp SEMI          &kp RBKT   &kp EQUAL  &kp LBKT
-                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -200,7 +191,7 @@
             bindings = <
                 &k0_nav_base      &kp END    &kp UP     &kp HOME
                 &kp PG_UP         &kp RIGHT  &kp DOWN   &kp LEFT
-                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -208,7 +199,7 @@
             bindings = <
                 &k0_nav_base      &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
                 &mkp MCLK         &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
-                &skp LEFT_CONTROL &skp LEFT_GUI  &skp LEFT_ALT  &mkp RCLK     &mkp LCLK
+                &skp LEFT_CONTROL &oskp LEFT_GUI  &skp LEFT_ALT  &mkp RCLK     &mkp LCLK
             >;
         };
 
@@ -216,7 +207,7 @@
             bindings = <
                 &k0_nav_base      &kp F9     &kp F8     &kp F7
                 &kp F10           &kp F3     &kp F2     &kp F1
-                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt SYM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
     };

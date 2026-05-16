@@ -30,6 +30,7 @@ struct behavior_superkey_config {
     int tapping_term_ms;
     int double_tap_ms;
     int release_after_ms;
+    uint32_t tap_keycode;
 };
 
 struct active_superkey {
@@ -58,18 +59,40 @@ struct oneshot_superkey {
     struct k_work_delayable release_timer;
 };
 
+struct pending_tap_superkey {
+    uint32_t position;
+#if IS_ENABLED(CONFIG_ZMK_SPLIT)
+    uint8_t source;
+#endif
+    uint32_t keycode;
+    uint32_t tap_keycode;
+    int64_t tapped_at;
+    bool timer_cancelled;
+    struct k_work_delayable tap_timer;
+};
+
 struct locked_superkey {
     uint32_t keycode;
 };
 
 static struct active_superkey active_superkeys[SUPERKEY_MAX_ACTIVE];
 static struct oneshot_superkey oneshot_superkeys[SUPERKEY_MAX_ACTIVE];
+static struct pending_tap_superkey pending_tap_superkeys[SUPERKEY_MAX_ACTIVE];
 static struct locked_superkey locked_superkeys[SUPERKEY_MAX_ACTIVE];
 
 extern const struct zmk_listener zmk_listener_behavior_superkey;
 
 static int send_keycode(uint32_t keycode, bool pressed, int64_t timestamp) {
     return raise_zmk_keycode_state_changed_from_encoded(keycode, pressed, timestamp);
+}
+
+static int send_tap_keycode(uint32_t keycode, int64_t timestamp) {
+    int err = send_keycode(keycode, true, timestamp);
+    if (err < 0) {
+        return err;
+    }
+
+    return send_keycode(keycode, false, timestamp);
 }
 
 static bool event_is_modifier(const struct zmk_keycode_state_changed *ev) {
@@ -91,6 +114,14 @@ static void clear_oneshot(struct oneshot_superkey *oneshot) {
     oneshot->tapped_at = 0;
     oneshot->release_at = 0;
     oneshot->timer_cancelled = false;
+}
+
+static void clear_pending_tap(struct pending_tap_superkey *pending) {
+    pending->position = SUPERKEY_POSITION_FREE;
+    pending->keycode = SUPERKEY_KEYCODE_FREE;
+    pending->tap_keycode = SUPERKEY_KEYCODE_FREE;
+    pending->tapped_at = 0;
+    pending->timer_cancelled = false;
 }
 
 static struct active_superkey *find_active(uint32_t position) {
@@ -137,12 +168,30 @@ static struct oneshot_superkey *find_oneshot(uint32_t keycode) {
     return NULL;
 }
 
+static struct pending_tap_superkey *find_pending_tap(uint32_t keycode) {
+    for (int i = 0; i < SUPERKEY_MAX_ACTIVE; i++) {
+        if (pending_tap_superkeys[i].keycode == keycode) {
+            return &pending_tap_superkeys[i];
+        }
+    }
+
+    return NULL;
+}
+
 static void cancel_oneshot(struct oneshot_superkey *oneshot) {
     int cancel_result = k_work_cancel_delayable(&oneshot->release_timer);
     if (cancel_result == -EINPROGRESS) {
         oneshot->timer_cancelled = true;
     }
     clear_oneshot(oneshot);
+}
+
+static void cancel_pending_tap(struct pending_tap_superkey *pending) {
+    int cancel_result = k_work_cancel_delayable(&pending->tap_timer);
+    if (cancel_result == -EINPROGRESS) {
+        pending->timer_cancelled = true;
+    }
+    clear_pending_tap(pending);
 }
 
 static struct oneshot_superkey *store_oneshot(struct zmk_behavior_binding_event event,
@@ -173,6 +222,35 @@ static struct oneshot_superkey *store_oneshot(struct zmk_behavior_binding_event 
         }
 
         return &oneshot_superkeys[i];
+    }
+
+    return NULL;
+}
+
+static struct pending_tap_superkey *store_pending_tap(struct zmk_behavior_binding_event event,
+                                                      uint32_t keycode, uint32_t tap_keycode,
+                                                      const struct behavior_superkey_config *config) {
+    struct pending_tap_superkey *existing = find_pending_tap(keycode);
+    if (existing != NULL) {
+        cancel_pending_tap(existing);
+    }
+
+    for (int i = 0; i < SUPERKEY_MAX_ACTIVE; i++) {
+        if (pending_tap_superkeys[i].position != SUPERKEY_POSITION_FREE) {
+            continue;
+        }
+
+        pending_tap_superkeys[i].position = event.position;
+#if IS_ENABLED(CONFIG_ZMK_SPLIT)
+        pending_tap_superkeys[i].source = event.source;
+#endif
+        pending_tap_superkeys[i].keycode = keycode;
+        pending_tap_superkeys[i].tap_keycode = tap_keycode;
+        pending_tap_superkeys[i].tapped_at = event.timestamp;
+        pending_tap_superkeys[i].timer_cancelled = false;
+
+        k_work_schedule(&pending_tap_superkeys[i].tap_timer, K_MSEC(config->double_tap_ms));
+        return &pending_tap_superkeys[i];
     }
 
     return NULL;
@@ -253,6 +331,26 @@ static void superkey_oneshot_timer_handler(struct k_work *item) {
     clear_oneshot(oneshot);
 }
 
+static void superkey_pending_tap_timer_handler(struct k_work *item) {
+    struct k_work_delayable *d_work = k_work_delayable_from_work(item);
+    struct pending_tap_superkey *pending =
+        CONTAINER_OF(d_work, struct pending_tap_superkey, tap_timer);
+
+    if (pending->position == SUPERKEY_POSITION_FREE) {
+        return;
+    }
+
+    if (pending->timer_cancelled) {
+        pending->timer_cancelled = false;
+        return;
+    }
+
+    uint32_t tap_keycode = pending->tap_keycode;
+    int64_t timestamp = k_uptime_get();
+    clear_pending_tap(pending);
+    send_tap_keycode(tap_keycode, timestamp);
+}
+
 static int on_superkey_pressed(struct zmk_behavior_binding *binding,
                                struct zmk_behavior_binding_event event) {
     const struct device *dev = zmk_behavior_get_binding(binding->behavior_dev);
@@ -275,6 +373,14 @@ static int on_superkey_pressed(struct zmk_behavior_binding *binding,
     struct oneshot_superkey *oneshot = find_oneshot(keycode);
     if (oneshot != NULL && event.timestamp <= oneshot->tapped_at + config->double_tap_ms) {
         cancel_oneshot(oneshot);
+        lock_keycode(keycode, event.timestamp);
+        active->consumed = true;
+        return ZMK_BEHAVIOR_OPAQUE;
+    }
+
+    struct pending_tap_superkey *pending_tap = find_pending_tap(keycode);
+    if (pending_tap != NULL && event.timestamp <= pending_tap->tapped_at + config->double_tap_ms) {
+        cancel_pending_tap(pending_tap);
         lock_keycode(keycode, event.timestamp);
         active->consumed = true;
         return ZMK_BEHAVIOR_OPAQUE;
@@ -303,6 +409,10 @@ static int on_superkey_released(struct zmk_behavior_binding *binding,
 
     if (active->hold_sent) {
         send_keycode(active->keycode, false, event.timestamp);
+    } else if (active->config->tap_keycode != SUPERKEY_KEYCODE_FREE) {
+        if (store_pending_tap(event, active->keycode, active->config->tap_keycode, active->config) == NULL) {
+            LOG_ERR("No free SuperKey pending tap slots");
+        }
     } else if (store_oneshot(event, active->keycode, active->config) == NULL) {
         LOG_ERR("No free SuperKey one-shot slots");
     }
@@ -434,6 +544,9 @@ static int behavior_superkey_init(const struct device *dev) {
         k_work_init_delayable(&oneshot_superkeys[i].release_timer, superkey_oneshot_timer_handler);
         clear_oneshot(&oneshot_superkeys[i]);
 
+        k_work_init_delayable(&pending_tap_superkeys[i].tap_timer, superkey_pending_tap_timer_handler);
+        clear_pending_tap(&pending_tap_superkeys[i]);
+
         locked_superkeys[i].keycode = SUPERKEY_KEYCODE_FREE;
     }
 
@@ -446,6 +559,7 @@ static int behavior_superkey_init(const struct device *dev) {
         .tapping_term_ms = DT_INST_PROP(n, tapping_term_ms),                                       \
         .double_tap_ms = DT_INST_PROP(n, double_tap_ms),                                           \
         .release_after_ms = DT_INST_PROP(n, release_after_ms),                                     \
+        .tap_keycode = DT_INST_PROP(n, tap_keycode),                                               \
     };                                                                                             \
     BEHAVIOR_DT_INST_DEFINE(n, behavior_superkey_init, NULL, NULL,                                 \
                             &behavior_superkey_config_##n, POST_KERNEL,                            \

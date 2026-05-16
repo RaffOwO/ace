@@ -16,3 +16,7 @@ properties:
   release-after-ms:
     type: int
     default: 3000
+  tap-keycode:
+    type: int
+    default: 0
+    description: Encoded HID keycode to tap on single tap instead of using one-shot behavior.
