@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: MIT
+
+description: Hold modifier, tap one-shot, double tap lock behavior
+
+compatible: "zmk,behavior-superkey"
+
+include: one_param.yaml
+
+properties:
+  tapping-term-ms:
+    type: int
+    default: 150
+  double-tap-ms:
+    type: int
+    default: 250
+  release-after-ms:
+    type: int
+    default: 3000
