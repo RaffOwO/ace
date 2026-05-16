@@ -66,6 +66,8 @@ static struct active_superkey active_superkeys[SUPERKEY_MAX_ACTIVE];
 static struct oneshot_superkey oneshot_superkeys[SUPERKEY_MAX_ACTIVE];
 static struct locked_superkey locked_superkeys[SUPERKEY_MAX_ACTIVE];
 
+extern const struct zmk_listener zmk_listener_behavior_superkey;
+
 static int send_keycode(uint32_t keycode, bool pressed, int64_t timestamp) {
     return raise_zmk_keycode_state_changed_from_encoded(keycode, pressed, timestamp);
 }
