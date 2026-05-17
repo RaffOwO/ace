@@ -9,7 +9,7 @@
 #define SYM 2
 #define NAV 3
 #define MOUSE 4
-#define FUN 5
+#define MEDIA 5
 #define SYS 6
 
 #define K0 0
@@ -27,34 +27,6 @@
 #define K12 12
 
 / {
-    behaviors {
-        skp: superkey {
-            compatible = "zmk,behavior-superkey";
-            display-name = "SuperKey";
-            #binding-cells = <1>;
-            tapping-term-ms = <150>;
-            double-tap-ms = <250>;
-            release-after-ms = <3000>;
-        };
-
-        oskp: os_superkey {
-            compatible = "zmk,behavior-superkey";
-            display-name = "OS SuperKey";
-            #binding-cells = <1>;
-            tapping-term-ms = <150>;
-            double-tap-ms = <200>;
-            release-after-ms = <3000>;
-            tap-keycode = <LEFT_GUI>;
-        };
-
-        k0_nav_base: k0_nav_base {
-            compatible = "zmk,behavior-tap-dance";
-            #binding-cells = <0>;
-            tapping-term-ms = <250>;
-            bindings = <&to NAV>, <&to BASE>;
-        };
-    };
-
     #define COMBO_GLOBAL(NAME, BINDINGS, KEYPOS) \
     combo_##NAME { \
         timeout-ms = <20>; \
@@ -73,17 +45,18 @@
     combos {
         compatible = "zmk,combos";
 
+        /* Global utility / layer access */
         COMBO_GLOBAL(tab, &kp TAB, K3 K2 K1)
         COMBO_GLOBAL(enter, &kp ENTER, K7 K6 K5)
 
-        COMBO_GLOBAL(access_sym, &to SYM, K12 K0)
-        COMBO_GLOBAL(access_mouse, &to MOUSE, K11 K0)
-        COMBO_GLOBAL(access_fun, &to FUN, K10 K0)
-        COMBO_GLOBAL(access_sys, &to SYS, K8 K0)
+        COMBO_GLOBAL(access_sym, &mo SYM, K11 K12)
+        COMBO_GLOBAL(access_nav, &to NAV, K0 K12)
+        COMBO_GLOBAL(access_mouse, &to MOUSE, K0 K11)
 
+        /* ALPHA */
         COMBO_LAYER(alpha_d, &kp D, K3 K7, BASE)
         COMBO_LAYER(alpha_l, &kp L, K2 K6, BASE)
-        COMBO_LAYER(alpha_y, &kp Y, K1 K5, BASE)
+        COMBO_LAYER(alpha_b, &kp B, K1 K5, BASE)
         COMBO_LAYER(alpha_r, &kp R, K2 K3, BASE)
         COMBO_LAYER(alpha_c, &kp C, K1 K2, BASE)
         COMBO_LAYER(alpha_h, &kp H, K6 K7, BASE)
@@ -91,8 +64,8 @@
         COMBO_LAYER(alpha_m, &kp M, K1 K3, BASE)
         COMBO_LAYER(alpha_w, &kp W, K5 K7, BASE)
         COMBO_LAYER(alpha_p, &kp P, K4 K5, BASE)
-        COMBO_LAYER(alpha_g, &kp G, K2 K7, BASE)
-        COMBO_LAYER(alpha_b, &kp B, K2 K5, BASE)
+        COMBO_LAYER(alpha_y, &kp Y, K2 K7, BASE)
+        COMBO_LAYER(alpha_g, &kp G, K2 K5, BASE)
         COMBO_LAYER(alpha_f, &kp F, K3 K6, BASE)
         COMBO_LAYER(alpha_v, &kp V, K1 K4, BASE)
         COMBO_LAYER(alpha_k, &kp K, K3 K5, BASE)
@@ -101,6 +74,7 @@
         COMBO_LAYER(alpha_j, &kp J, K4 K7, BASE)
         COMBO_LAYER(alpha_q, &kp Q, K1 K6, BASE)
 
+        /* NUM */
         COMBO_LAYER(num_4, &kp N4, K3 K7, NUM)
         COMBO_LAYER(num_5, &kp N5, K2 K6, NUM)
         COMBO_LAYER(num_6, &kp N6, K1 K5, NUM)
@@ -108,59 +82,41 @@
         COMBO_LAYER(num_minus, &kp MINUS, K1 K2, NUM)
         COMBO_LAYER(num_star, &kp STAR, K6 K7, NUM)
         COMBO_LAYER(num_slash, &kp FSLH, K5 K6, NUM)
-        COMBO_LAYER(num_equal, &kp EQUAL, K1 K3, NUM)
+        COMBO_LAYER(num_comma, &kp COMMA, K1 K4, NUM)
         COMBO_LAYER(num_dot, &kp DOT, K4 K5, NUM)
-        COMBO_LAYER(num_comma, &kp COMMA, K2 K5, NUM)
-        COMBO_LAYER(num_colon, &kp COLON, K3 K6, NUM)
-        COMBO_LAYER(num_semi, &kp SEMI, K5 K7, NUM)
+        COMBO_LAYER(num_semi, &kp SEMI, K3 K4, NUM)
+        COMBO_LAYER(num_colon, &kp COLON, K4 K7, NUM)
+        COMBO_LAYER(num_equal, &kp EQUAL, K1 K3, NUM)
         COMBO_LAYER(num_percent, &kp PRCNT, K2 K7, NUM)
-        COMBO_LAYER(num_caret, &kp CARET, K1 K4, NUM)
+        COMBO_LAYER(num_caret, &kp CARET, K3 K6, NUM)
+        COMBO_LAYER(num_lt, &kp LT, K2 K5, NUM)
+        COMBO_LAYER(num_gt, &kp GT, K1 K6, NUM)
+        COMBO_LAYER(num_lpar, &kp LPAR, K1 K7, NUM)
+        COMBO_LAYER(num_rpar, &kp RPAR, K3 K5, NUM)
 
-        COMBO_LAYER(sym_slash, &kp FSLH, K3 K7, SYM)
-        COMBO_LAYER(sym_star, &kp STAR, K2 K6, SYM)
-        COMBO_LAYER(sym_bslash, &kp BSLH, K1 K5, SYM)
+        /* SYM */
+        COMBO_LAYER(sym_semi, &kp SEMI, K2 K6, SYM)
+        COMBO_LAYER(sym_slash, &kp FSLH, K2 K7, SYM)
+        COMBO_LAYER(sym_bslash, &kp BSLH, K3 K6, SYM)
         COMBO_LAYER(sym_lt, &kp LT, K2 K3, SYM)
         COMBO_LAYER(sym_gt, &kp GT, K1 K2, SYM)
         COMBO_LAYER(sym_lbrace, &kp LBRC, K6 K7, SYM)
         COMBO_LAYER(sym_rbrace, &kp RBRC, K5 K6, SYM)
-        COMBO_LAYER(sym_under, &kp UNDER, K1 K3, SYM)
-        COMBO_LAYER(sym_qmark, &kp QMARK, K5 K7, SYM)
         COMBO_LAYER(sym_dquote, &kp DQT, K4 K5, SYM)
-        COMBO_LAYER(sym_amp, &kp AMPS, K2 K7, SYM)
-        COMBO_LAYER(sym_pipe, &kp PIPE, K2 K5, SYM)
-        COMBO_LAYER(sym_at, &kp AT, K3 K6, SYM)
-        COMBO_LAYER(sym_dollar, &kp DLLR, K1 K4, SYM)
-        COMBO_LAYER(sym_tilde, &kp TILDE, K3 K5, SYM)
+        COMBO_LAYER(sym_grave, &kp GRAVE, K1 K4, SYM)
+        COMBO_LAYER(sym_under, &kp UNDER, K5 K7, SYM)
+        COMBO_LAYER(sym_pipe, &kp PIPE, K3 K7, SYM)
+        COMBO_LAYER(sym_amp, &kp AMPS, K2 K5, SYM)
+        COMBO_LAYER(sym_at, &kp AT, K1 K5, SYM)
+        COMBO_LAYER(sym_qmark, &kp QMARK, K4 K7, SYM)
         COMBO_LAYER(sym_exclaim, &kp EXCL, K3 K4, SYM)
         COMBO_LAYER(sym_hash, &kp HASH, K1 K7, SYM)
-        COMBO_LAYER(sym_sqt, &kp SQT, K4 K7, SYM)
-        COMBO_LAYER(sym_grave, &kp GRAVE, K1 K6, SYM)
+        COMBO_LAYER(sym_dollar, &kp DLLR, K3 K5, SYM)
+        COMBO_LAYER(sym_tilde, &kp TILDE, K1 K3, SYM)
 
-        COMBO_LAYER(nav_pgdn, &kp PG_DN, K4 K12, NAV)
-        COMBO_LAYER(nav_esc, &kp ESC, K4 K11, NAV)
-        COMBO_LAYER(nav_del, &kp DEL, K4 K10, NAV)
-        COMBO_LAYER(nav_caps, &kp CAPS, K4 K9, NAV)
-        COMBO_LAYER(nav_ins, &kp INS, K4 K8, NAV)
-
-        COMBO_LAYER(mouse_drag, &mkp LCLK, K4 K12, MOUSE)
-        COMBO_LAYER(mouse_btn4, &mkp MB4, K4 K11, MOUSE)
-        COMBO_LAYER(mouse_scroll_up_fast, &msc SCRL_UP, K4 K10, MOUSE)
-        COMBO_LAYER(mouse_scroll_down_fast, &msc SCRL_DOWN, K4 K8, MOUSE)
-
-        COMBO_LAYER(fun_f4, &kp F4, K3 K7, FUN)
-        COMBO_LAYER(fun_f5, &kp F5, K2 K6, FUN)
-        COMBO_LAYER(fun_f6, &kp F6, K1 K5, FUN)
-        COMBO_LAYER(fun_vol_up, &kp C_VOL_UP, K2 K3, FUN)
-        COMBO_LAYER(fun_vol_down, &kp C_VOL_DN, K1 K2, FUN)
-        COMBO_LAYER(fun_prev, &kp C_PREV, K6 K7, FUN)
-        COMBO_LAYER(fun_next, &kp C_NEXT, K5 K6, FUN)
-        COMBO_LAYER(fun_f11, &kp F11, K1 K3, FUN)
-        COMBO_LAYER(fun_f12, &kp F12, K5 K7, FUN)
-        COMBO_LAYER(fun_mute, &kp C_MUTE, K4 K5, FUN)
-        COMBO_LAYER(fun_play, &kp C_PP, K2 K7, FUN)
-        COMBO_LAYER(fun_bri_up, &kp C_BRI_UP, K2 K5, FUN)
-        COMBO_LAYER(fun_bri_down, &kp C_BRI_DN, K3 K6, FUN)
-        COMBO_LAYER(fun_studio_unlock, &studio_unlock, K3 K4, FUN)
+        /* MOUSE optional side buttons */
+        COMBO_LAYER(mouse_btn4, &mkp MB4, K4 K1, MOUSE)
+        COMBO_LAYER(mouse_btn5, &mkp MB5, K4 K3, MOUSE)
     };
 
     keymap {
@@ -168,57 +124,57 @@
 
         base_layer {
             bindings = <
-                &k0_nav_base         &kp S      &kp N      &kp I
-                &kp A                &kp O      &kp T      &kp E
-                &skp LEFT_CONTROL    &oskp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &mo SYS         &kp S       &kp N       &kp I
+                &kp A           &kp O       &kp T       &kp E
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
         num_layer {
             bindings = <
-                &k0_nav_base      &kp N9     &kp N8     &kp N7
-                &kp N0            &kp N3     &kp N2     &kp N1
-                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &to BASE        &kp N9      &kp N8      &kp N7
+                &kp N0          &kp N3      &kp N2      &kp N1
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
             >;
         };
 
         sym_layer {
             bindings = <
-                &k0_nav_base      &kp RPAR   &kp COLON  &kp LPAR
-                &kp SEMI          &kp RBKT   &kp EQUAL  &kp LBKT
-                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &to BASE        &kp RPAR    &kp COLON   &kp LPAR
+                &kp SQT         &kp RBKT    &kp EQUAL   &kp LBKT
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans      &trans
             >;
         };
 
         nav_layer {
             bindings = <
-                &k0_nav_base      &kp END    &kp UP     &kp HOME
-                &kp PG_UP         &kp RIGHT  &kp DOWN   &kp LEFT
-                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &to BASE        &kp END     &kp UP      &kp HOME
+                &kp DEL         &kp RIGHT   &kp DOWN    &kp LEFT
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &kp BSPC    &kp LEFT_SHIFT
             >;
         };
 
         mouse_layer {
             bindings = <
-                &k0_nav_base      &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
-                &mkp MCLK         &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
-                &skp LEFT_CONTROL &oskp LEFT_GUI  &skp LEFT_ALT  &mkp RCLK     &mkp LCLK
+                &to BASE        &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
+                &none           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
+                &kp LEFT_CONTROL &kp LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
             >;
         };
 
-        fun_layer {
+        media_layer {
             bindings = <
-                &k0_nav_base      &kp F9     &kp F8     &kp F7
-                &kp F10           &kp F3     &kp F2     &kp F1
-                &skp LEFT_CONTROL &oskp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &trans          &kp C_NEXT  &kp C_PP    &kp C_PREV
+                &none           &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
+                &none           &none       &none       &none       &trans
             >;
         };
 
         sys_layer {
             bindings = <
-                &to BASE       &bt BT_CLR    &bt BT_SEL 4 &bt BT_SEL 3
-                &out OUT_TOG   &bt BT_SEL 2  &bt BT_SEL 1 &bt BT_SEL 0
-                &trans         &trans        &trans       &trans       &trans
+                &trans          &out OUT_TOG &bt BT_SEL 4 &bt BT_SEL 3
+                &none           &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
+                &none           &none        &none        &bt BT_CLR  &mo MEDIA
             >;
         };
     };
