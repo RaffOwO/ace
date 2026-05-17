@@ -9,8 +9,9 @@
 #define SYM 2
 #define NAV 3
 #define MOUSE 4
-#define MEDIA 5
-#define SYS 6
+#define FUNC 5
+#define MEDIA 6
+#define SYS 7
 
 #define K0 0
 #define K1 1
@@ -25,6 +26,19 @@
 #define K10 10
 #define K11 11
 #define K12 12
+
+/ {
+    behaviors {
+        skp: superkey {
+            compatible = "zmk,behavior-superkey";
+            display-name = "SuperKey";
+            #binding-cells = <1>;
+            tapping-term-ms = <150>;
+            double-tap-ms = <250>;
+            release-after-ms = <3000>;
+        };
+    };
+};
 
 / {
     #define COMBO_GLOBAL(NAME, BINDINGS, KEYPOS) \
@@ -49,10 +63,11 @@
         COMBO_GLOBAL(tab, &kp TAB, K3 K2 K1)
         COMBO_GLOBAL(enter, &kp ENTER, K7 K6 K5)
         COMBO_GLOBAL(esc, &kp ESC, K6 K5 K4)
-
+        
         COMBO_GLOBAL(access_sym, &mo SYM, K11 K12)
         COMBO_GLOBAL(access_nav, &to NAV, K0 K12)
         COMBO_GLOBAL(access_mouse, &to MOUSE, K0 K11)
+        COMBO_GLOBAL(access_func, &to FUNC, K0 K10)
 
         /* ALPHA */
         COMBO_LAYER(alpha_d, &kp D, K3 K7, BASE)
@@ -115,6 +130,13 @@
         COMBO_LAYER(sym_dollar, &kp DLLR, K3 K5, SYM)
         COMBO_LAYER(sym_tilde, &kp TILDE, K1 K3, SYM)
 
+        /* FUNC */
+        COMBO_LAYER(func_f7, &kp F7, K3 K7, FUNC)
+        COMBO_LAYER(func_f8, &kp F8, K2 K6, FUNC)
+        COMBO_LAYER(func_f9, &kp F9, K1 K5, FUNC)
+        COMBO_LAYER(func_f10, &kp F10, K2 K3, FUNC)
+        COMBO_LAYER(func_f11, &kp F11, K1 K2, FUNC)
+
         /* MOUSE optional side buttons */
         COMBO_LAYER(mouse_btn4, &mkp MB4, K4 K1, MOUSE)
         COMBO_LAYER(mouse_btn5, &mkp MB5, K4 K3, MOUSE)
@@ -127,7 +149,7 @@
             bindings = <
                 &mo SYS         &kp S       &kp N       &kp I
                 &kp A           &kp O       &kp T       &kp E
-                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -135,7 +157,7 @@
             bindings = <
                 &to BASE        &kp N9      &kp N8      &kp N7
                 &kp N0          &kp N3      &kp N2      &kp N1
-                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
+                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -143,7 +165,7 @@
             bindings = <
                 &to BASE        &kp RPAR    &kp COLON   &kp LPAR
                 &kp SQT         &kp RBKT    &kp EQUAL   &kp LBKT
-                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans      &trans
+                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &trans      &trans
             >;
         };
 
@@ -151,7 +173,7 @@
             bindings = <
                 &to BASE        &kp END     &kp UP      &kp HOME
                 &kp DEL         &kp RIGHT   &kp DOWN    &kp LEFT
-                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &kp BSPC    &kp LEFT_SHIFT
+                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &kp BSPC    &kp LEFT_SHIFT
             >;
         };
 
@@ -159,7 +181,16 @@
             bindings = <
                 &to BASE        &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
                 &none           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
-                &kp LEFT_CONTROL &kp LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
+                &skp LEFT_CONTROL &skp LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
+            >;
+        };
+
+
+        func_layer {
+            bindings = <
+                &to BASE        &kp F6      &kp F5      &kp F4
+                &kp F12         &kp F3      &kp F2      &kp F1
+                &skp LEFT_CONTROL &skp LEFT_GUI &skp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
