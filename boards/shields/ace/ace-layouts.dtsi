@@ -1,10 +1,10 @@
 #include <physical_layouts.dtsi>
 
 / {
-    tessera_layout: physical_layout_0 {
+    ace_layout: physical_layout_0 {
         compatible = "zmk,physical-layout";
-        display-name = "Tessera Split Layout";
-        transform = <&tessera_transform>;
+        display-name = "ACE Split Layout";
+        transform = <&ace_transform>;
         keys = <
             &key_physical_attrs 100 100 0 0 0 0 0
             &key_physical_attrs 100 100 100 0 0 0 0

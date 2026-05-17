@@ -1,5 +1,5 @@
 /*
- * Tessera Taipo-style split keymap.
+ * ACE Taipo-style split keymap.
  *
  * Global key position order:
  *   Left card:  L0..L12  = positions 0..12
@@ -30,7 +30,7 @@
 #define SYS 13
 #define MEDIA 14
 
-#define COMBO_TIMEOUT 20
+#define COMBO_TIMEOUT 33
 #define STICKY_TIMEOUT 3000
 
 #define L0 0
@@ -68,7 +68,7 @@
 
 / {
     behaviors {
-        tsl: tessera_side_layer {
+        tsl: ace_side_layer {
             compatible = "zmk,behavior-side-layer";
             #binding-cells = <1>;
             left-layers = <L_BASE L_NAV L_MOUSE L_FUNC>;

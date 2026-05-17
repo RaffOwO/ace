@@ -1,12 +1,12 @@
-# ZMK Config for Tessera
+# ZMK Config for ACE
 
-Tessera is the two-card version of TheCardV2: a one-device ZMK split that uses Taipo-inspired side-local chord logic.
+ACE is the two-card version of the keyboard: a one-device ZMK split that uses Taipo-inspired side-local chord logic.
 
 ## Build Targets
 
 - Board: `nice_nano_v2`
-- Left shield: `tessera_left`
-- Right shield: `tessera_right`
+- Left shield: `ace_left`
+- Right shield: `ace_right`
 - Right shield is the central side and is the only Bluetooth keyboard the host pairs with.
 
 ## Local Build
@@ -20,13 +20,13 @@ zmk west update
 Build the left half:
 
 ```powershell
-& "C:\Users\raffa\AppData\Roaming\uv\tools\zmk\Scripts\python.exe" -m west build -s zmk/app -d build/tessera_left -b nice_nano_v2 -- -DSHIELD=tessera_left -DZMK_CONFIG="E:/Projects/TheCardv2/zmk-config-thecardv2/config" -DZMK_EXTRA_MODULES="E:/Projects/TheCardv2/zmk-config-thecardv2"
+& "C:\Users\raffa\AppData\Roaming\uv\tools\zmk\Scripts\python.exe" -m west build -s zmk/app -d build/ace_left -b nice_nano_v2 -- -DSHIELD=ace_left -DZMK_CONFIG="E:/Projects/ACE/zmk-config-ace/config" -DZMK_EXTRA_MODULES="E:/Projects/ACE/zmk-config-ace"
 ```
 
 Build the right half:
 
 ```powershell
-& "C:\Users\raffa\AppData\Roaming\uv\tools\zmk\Scripts\python.exe" -m west build -s zmk/app -d build/tessera_right -b nice_nano_v2 -- -DSHIELD=tessera_right -DZMK_CONFIG="E:/Projects/TheCardv2/zmk-config-thecardv2/config" -DZMK_EXTRA_MODULES="E:/Projects/TheCardv2/zmk-config-thecardv2"
+& "C:\Users\raffa\AppData\Roaming\uv\tools\zmk\Scripts\python.exe" -m west build -s zmk/app -d build/ace_right -b nice_nano_v2 -- -DSHIELD=ace_right -DZMK_CONFIG="E:/Projects/ACE/zmk-config-ace/config" -DZMK_EXTRA_MODULES="E:/Projects/ACE/zmk-config-ace"
 ```
 
 Current local blocker: CMake is not installed or not on PATH.

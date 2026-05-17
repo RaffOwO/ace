@@ -1,0 +1,5 @@
+config SHIELD_ACE_LEFT
+    def_bool $(shields_list_contains,ace_left)
+
+config SHIELD_ACE_RIGHT
+    def_bool $(shields_list_contains,ace_right)

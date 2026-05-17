@@ -1,12 +1,12 @@
 #include <dt-bindings/zmk/matrix_transform.h>
-#include "tessera-layouts.dtsi"
+#include "ace-layouts.dtsi"
 
 / {
     chosen {
-        zmk,physical-layout = &tessera_layout;
+        zmk,physical-layout = &ace_layout;
     };
 
-    tessera_transform: matrix_transform {
+    ace_transform: matrix_transform {
         compatible = "zmk,matrix-transform";
         rows = <1>;
         columns = <26>;
@@ -19,5 +19,15 @@
             RC(0,17) RC(0,18) RC(0,19) RC(0,20)
             RC(0,21) RC(0,22) RC(0,23) RC(0,24) RC(0,25)
         >;
+    };
+
+    mmv_input_listener: mmv_input_listener {
+        compatible = "zmk,input-listener";
+        device = <&mmv>;
+    };
+
+    msc_input_listener: msc_input_listener {
+        compatible = "zmk,input-listener";
+        device = <&msc>;
     };
 };

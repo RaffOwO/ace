@@ -1,4 +1,4 @@
-#include "tessera.dtsi"
+#include "ace.dtsi"
 
 / {
     chosen {
@@ -27,6 +27,6 @@
     };
 };
 
-&tessera_transform {
+&ace_transform {
     col-offset = <13>;
 };

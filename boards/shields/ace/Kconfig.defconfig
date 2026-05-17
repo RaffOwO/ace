@@ -1,14 +1,14 @@
-if SHIELD_TESSERA_LEFT || SHIELD_TESSERA_RIGHT
+if SHIELD_ACE_LEFT || SHIELD_ACE_RIGHT
 
 config ZMK_KEYBOARD_NAME
-    default "Tessera"
+    default "ACE"
 
 config ZMK_SPLIT
     default y
 
 endif
 
-if SHIELD_TESSERA_RIGHT
+if SHIELD_ACE_RIGHT
 
 config ZMK_SPLIT_ROLE_CENTRAL
     default y

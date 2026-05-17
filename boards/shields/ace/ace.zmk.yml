@@ -1,0 +1,12 @@
+file_format: "1"
+id: ace
+name: ACE
+type: shield
+url: https://github.com/RaffOwO/ace
+requires: [pro_micro]
+features:
+  - keys
+  - pointer
+siblings:
+  - ace_left
+  - ace_right

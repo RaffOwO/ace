@@ -1,7 +1,7 @@
 config ZMK_BEHAVIOR_SUPERKEY
-    bool "Tessera SuperKey behavior"
+    bool "ACE SuperKey behavior"
     default y
 
 config ZMK_BEHAVIOR_SIDE_LAYER
-    bool "Tessera side-local layer behavior"
+    bool "ACE side-local layer behavior"
     default y
