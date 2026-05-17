@@ -24,7 +24,6 @@
 #define MEDIA 7
 
 #define COMBO_TIMEOUT 70
-#define COMBO_LAYERS BASE
 #define STICKY_TIMEOUT 500
 
 #define L0 0
@@ -90,14 +89,12 @@
         timeout-ms = <COMBO_TIMEOUT>; \
         bindings = <BINDINGS>; \
         key-positions = <LEFT_KEYPOS>; \
-        layers = <COMBO_LAYERS>; \
         slow-release; \
     }; \
     combo_r_##NAME { \
         timeout-ms = <COMBO_TIMEOUT>; \
         bindings = <BINDINGS>; \
         key-positions = <RIGHT_KEYPOS>; \
-        layers = <COMBO_LAYERS>; \
         slow-release; \
     };
 
@@ -219,11 +216,11 @@
 
         num_layer {
             bindings = <
-                &to BASE        &kp N9      &kp N8      &kp N7
+                &k0_sys SYS BASE &kp N9      &kp N8      &kp N7
                 &kp N0          &kp N3      &kp N2      &kp N1
                 &trans           &trans       &trans       &trans      &mt LEFT_SHIFT SPACE
 
-                &to BASE        &kp N9      &kp N8      &kp N7
+                &k0_sys SYS BASE &kp N9      &kp N8      &kp N7
                 &kp N0          &kp N3      &kp N2      &kp N1
                 &trans           &trans       &trans       &trans      &mt LEFT_SHIFT SPACE
             >;
@@ -231,11 +228,11 @@
 
         sym_layer {
             bindings = <
-                &to BASE        &kp RPAR    &kp COLON   &kp LPAR
+                &k0_sys SYS BASE &kp RPAR    &kp COLON   &kp LPAR
                 &kp SQT         &kp RBKT    &kp EQUAL   &kp LBKT
                 &trans           &trans       &trans       &trans      &trans
 
-                &to BASE        &kp RPAR    &kp COLON   &kp LPAR
+                &k0_sys SYS BASE &kp RPAR    &kp COLON   &kp LPAR
                 &kp SQT         &kp RBKT    &kp EQUAL   &kp LBKT
                 &trans           &trans       &trans       &trans      &trans
             >;
@@ -243,11 +240,11 @@
 
         nav_layer {
             bindings = <
-                &to BASE        &kp END     &kp UP      &kp HOME
+                &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
                 &kp DEL         &kp RIGHT   &kp DOWN    &kp LEFT
                 &trans           &trans       &trans       &kp BSPC    &kp LEFT_SHIFT
 
-                &to BASE        &kp END     &kp UP      &kp HOME
+                &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
                 &kp DEL         &kp RIGHT   &kp DOWN    &kp LEFT
                 &trans           &trans       &trans       &kp BSPC    &kp LEFT_SHIFT
             >;
@@ -255,11 +252,11 @@
 
         mouse_layer {
             bindings = <
-                &to BASE        &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
+                &k0_sys SYS BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
                 &trans           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
                 &trans           &trans          &mkp MCLK      &mkp RCLK     &mkp LCLK
 
-                &to BASE        &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
+                &k0_sys SYS BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
                 &trans           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
                 &trans           &trans          &mkp MCLK      &mkp RCLK     &mkp LCLK
             >;
@@ -267,11 +264,11 @@
 
         func_layer {
             bindings = <
-                &to BASE        &kp F6      &kp F5      &kp F4
+                &k0_sys SYS BASE &kp F6      &kp F5      &kp F4
                 &kp F12         &kp F3      &kp F2      &kp F1
                 &trans           &trans       &trans       &lt NUM BSPC &mt LEFT_SHIFT SPACE
 
-                &to BASE        &kp F6      &kp F5      &kp F4
+                &k0_sys SYS BASE &kp F6      &kp F5      &kp F4
                 &kp F12         &kp F3      &kp F2      &kp F1
                 &trans           &trans       &trans       &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
