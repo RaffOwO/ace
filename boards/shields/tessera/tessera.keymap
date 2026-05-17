@@ -23,8 +23,8 @@
 #define SYS 6
 #define MEDIA 7
 
-#define COMBO_TIMEOUT 70
-#define STICKY_TIMEOUT 500
+#define COMBO_TIMEOUT 20
+#define STICKY_TIMEOUT 3000
 
 #define L0 0
 #define L1 1
