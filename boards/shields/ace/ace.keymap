@@ -30,7 +30,11 @@
 #define SYS 13
 #define MEDIA 14
 
-#define COMBO_TIMEOUT 33
+/* Right side is central/local; left side crosses split BLE and needs more slack. */
+#define COMBO_TIMEOUT_RIGHT 33
+#define COMBO_TIMEOUT_LEFT 45
+#define COMBO_TIMEOUT_GLOBAL 45
+#define COMBO_TIMEOUT_ACCESS 55
 #define STICKY_TIMEOUT 3000
 
 #define L0 0
@@ -87,13 +91,13 @@
 
     #define TCOMBO(NAME, BINDINGS, LEFT_KEYPOS, RIGHT_KEYPOS) \
     combo_l_##NAME { \
-        timeout-ms = <COMBO_TIMEOUT>; \
+        timeout-ms = <COMBO_TIMEOUT_GLOBAL>; \
         bindings = <BINDINGS>; \
         key-positions = <LEFT_KEYPOS>; \
         slow-release; \
     }; \
     combo_r_##NAME { \
-        timeout-ms = <COMBO_TIMEOUT>; \
+        timeout-ms = <COMBO_TIMEOUT_GLOBAL>; \
         bindings = <BINDINGS>; \
         key-positions = <RIGHT_KEYPOS>; \
         slow-release; \
@@ -101,13 +105,13 @@
 
     #define TCOMBO_SPLIT(NAME, LEFT_BINDING, RIGHT_BINDING, LEFT_KEYPOS, RIGHT_KEYPOS) \
     combo_l_##NAME { \
-        timeout-ms = <COMBO_TIMEOUT>; \
+        timeout-ms = <COMBO_TIMEOUT_ACCESS>; \
         bindings = <LEFT_BINDING>; \
         key-positions = <LEFT_KEYPOS>; \
         slow-release; \
     }; \
     combo_r_##NAME { \
-        timeout-ms = <COMBO_TIMEOUT>; \
+        timeout-ms = <COMBO_TIMEOUT_ACCESS>; \
         bindings = <RIGHT_BINDING>; \
         key-positions = <RIGHT_KEYPOS>; \
         slow-release; \
@@ -115,14 +119,14 @@
 
     #define TCOMBO_SIDE(NAME, BINDINGS, LEFT_KEYPOS, RIGHT_KEYPOS, LEFT_LAYER, RIGHT_LAYER) \
     combo_l_##NAME { \
-        timeout-ms = <COMBO_TIMEOUT>; \
+        timeout-ms = <COMBO_TIMEOUT_LEFT>; \
         bindings = <BINDINGS>; \
         key-positions = <LEFT_KEYPOS>; \
         layers = <LEFT_LAYER>; \
         slow-release; \
     }; \
     combo_r_##NAME { \
-        timeout-ms = <COMBO_TIMEOUT>; \
+        timeout-ms = <COMBO_TIMEOUT_RIGHT>; \
         bindings = <BINDINGS>; \
         key-positions = <RIGHT_KEYPOS>; \
         layers = <RIGHT_LAYER>; \

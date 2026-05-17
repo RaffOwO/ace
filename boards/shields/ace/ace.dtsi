@@ -21,13 +21,4 @@
         >;
     };
 
-    mmv_input_listener: mmv_input_listener {
-        compatible = "zmk,input-listener";
-        device = <&mmv>;
-    };
-
-    msc_input_listener: msc_input_listener {
-        compatible = "zmk,input-listener";
-        device = <&msc>;
-    };
 };

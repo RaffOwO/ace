@@ -9,6 +9,14 @@ ACE is the two-card version of the keyboard: a one-device ZMK split that uses Ta
 - Right shield: `ace_right`
 - Right shield is the central side and is the only Bluetooth keyboard the host pairs with.
 
+## Pointing / Mouse Notes
+
+ACE enables ZMK pointing behavior for mouse movement, scroll, and mouse buttons.
+If the keyboard was paired before pointing support was added, the host may keep
+the old Bluetooth HID descriptor and ignore mouse reports. Clear the host-side
+Bluetooth pairing and clear the keyboard bonding state, then pair again after
+flashing the pointing-enabled firmware.
+
 ## Local Build
 
 After the ZMK local build dependencies are installed, run from this folder:
