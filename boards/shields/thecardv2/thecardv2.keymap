@@ -48,6 +48,7 @@
         /* Global utility / layer access */
         COMBO_GLOBAL(tab, &kp TAB, K3 K2 K1)
         COMBO_GLOBAL(enter, &kp ENTER, K7 K6 K5)
+        COMBO_GLOBAL(esc, &kp ESC, K6 K5 K4)
 
         COMBO_GLOBAL(access_sym, &mo SYM, K11 K12)
         COMBO_GLOBAL(access_nav, &to NAV, K0 K12)
