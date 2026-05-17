@@ -124,11 +124,17 @@ static void clear_pending_tap(struct pending_tap_superkey *pending) {
     pending->timer_cancelled = false;
 }
 
-static struct active_superkey *find_active(uint32_t position) {
+static struct active_superkey *find_active(struct zmk_behavior_binding_event event) {
     for (int i = 0; i < SUPERKEY_MAX_ACTIVE; i++) {
-        if (active_superkeys[i].position == position) {
-            return &active_superkeys[i];
+        if (active_superkeys[i].position != event.position) {
+            continue;
         }
+#if IS_ENABLED(CONFIG_ZMK_SPLIT)
+        if (active_superkeys[i].source != event.source) {
+            continue;
+        }
+#endif
+        return &active_superkeys[i];
     }
 
     return NULL;
@@ -392,7 +398,7 @@ static int on_superkey_pressed(struct zmk_behavior_binding *binding,
 
 static int on_superkey_released(struct zmk_behavior_binding *binding,
                                 struct zmk_behavior_binding_event event) {
-    struct active_superkey *active = find_active(event.position);
+    struct active_superkey *active = find_active(event);
     if (active == NULL) {
         return ZMK_BEHAVIOR_OPAQUE;
     }
