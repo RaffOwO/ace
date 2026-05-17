@@ -1,11 +1,12 @@
 file_format: "1"
-id: thecardv2
-name: TheCardV2
+id: tessera
+name: Tessera
 type: shield
 url: https://github.com/RaffOwO/zmk-config-thecardv2
 requires: [pro_micro]
 features:
   - keys
-  - studio
+  - pointer
 siblings:
-  - thecardv2
+  - tessera_left
+  - tessera_right

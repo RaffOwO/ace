@@ -1,4 +1,4 @@
-name: zmk-keyboard-thecardv2
+name: zmk-keyboard-tessera
 
 build:
   cmake: .

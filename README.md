@@ -1,11 +1,13 @@
-# ZMK Config for TheCardV2
+# ZMK Config for Tessera
 
-This is the ZMK firmware config for TheCardV2.
+Tessera is the split 26-key version of TheCardV2: two mirrored 13-key halves running the same Taipo-inspired local chord logic.
 
-## Build Target
+## Build Targets
 
 - Board: `nice_nano_v2`
-- Shield: `thecardv2`
+- Left shield: `tessera_left`
+- Right shield: `tessera_right`
+- Right half is the central side.
 
 ## Local Build
 
@@ -15,17 +17,34 @@ After the ZMK local build dependencies are installed, run from this folder:
 zmk west update
 ```
 
-Then build with West:
+Build the left half:
 
 ```powershell
-& "C:\Users\raffa\AppData\Roaming\uv\tools\zmk\Scripts\python.exe" -m west build -s zmk/app -d build/thecardv2 -b nice_nano_v2 -- -DSHIELD=thecardv2 -DZMK_CONFIG="E:/Projects/TheCardv2/zmk-config-thecardv2/config" -DZMK_EXTRA_MODULES="E:/Projects/TheCardv2/zmk-config-thecardv2"
+& "C:\Users\raffa\AppData\Roaming\uv\tools\zmk\Scripts\python.exe" -m west build -s zmk/app -d build/tessera_left -b nice_nano_v2 -- -DSHIELD=tessera_left -DZMK_CONFIG="E:/Projects/TheCardv2/zmk-config-thecardv2/config" -DZMK_EXTRA_MODULES="E:/Projects/TheCardv2/zmk-config-thecardv2"
+```
+
+Build the right half:
+
+```powershell
+& "C:\Users\raffa\AppData\Roaming\uv\tools\zmk\Scripts\python.exe" -m west build -s zmk/app -d build/tessera_right -b nice_nano_v2 -- -DSHIELD=tessera_right -DZMK_CONFIG="E:/Projects/TheCardv2/zmk-config-thecardv2/config" -DZMK_EXTRA_MODULES="E:/Projects/TheCardv2/zmk-config-thecardv2"
 ```
 
 Current local blocker: CMake is not installed or not on PATH.
 
-## Pin Order
+## Split Model
 
-The shield overlay follows the current KiCad PCB switch order:
+The keymap has 26 global positions:
+
+```text
+Left half:  L0..L12  = positions 0..12
+Right half: R0..R12  = positions 13..25
+```
+
+There are no cross-half combos. Each half has the same local alpha, number, symbol, navigation, mouse, function, system, media, and mouse-acceleration logic.
+
+## Local Half Pin Order
+
+Each half follows the same flipped-PCB switch order:
 
 ```text
 0  1  2  3
@@ -33,12 +52,10 @@ The shield overlay follows the current KiCad PCB switch order:
 8  9 10 11 12
 ```
 
-PCB nets by position:
+PCB nets by local position:
 
 ```text
 top:  P2,  P3,  P4,  P5
 home: P6,  P7,  P8,  P9
 mod:  P10, P16, P14, P15, P18
 ```
-
-Note: `ergogen.yaml` currently names the final row differently from the checked-in KiCad PCB.
