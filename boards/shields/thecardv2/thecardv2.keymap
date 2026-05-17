@@ -10,8 +10,8 @@
 #define NAV 3
 #define MOUSE 4
 #define FUNC 5
-#define MEDIA 6
-#define SYS 7
+#define SYS 6
+#define MEDIA 7
 
 #define K0 0
 #define K1 1
@@ -36,12 +36,38 @@
             tapping-term-ms = <150>;
             double-tap-ms = <250>;
             release-after-ms = <3000>;
+
+        nav_media: nav_media {
+            compatible = "zmk,behavior-hold-tap";
+            display-name = "NAV / MEDIA";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <180>;
+            bindings = <&mo>, <&to>;
+        };
+
+        mouse_btclr: mouse_btclr {
+            compatible = "zmk,behavior-hold-tap";
+            display-name = "MOUSE / BT Clear";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <250>;
+            bindings = <&bt>, <&to>;
+        };
+
         };
     };
 };
 
 / {
     #define COMBO_GLOBAL(NAME, BINDINGS, KEYPOS) \
+    combo_##NAME { \
+        timeout-ms = <20>; \
+        bindings = <BINDINGS>; \
+        key-positions = <KEYPOS>; \
+    };
+
+    #define COMBO_ACCESS(NAME, BINDINGS, KEYPOS) \
     combo_##NAME { \
         timeout-ms = <20>; \
         bindings = <BINDINGS>; \
@@ -63,11 +89,11 @@
         COMBO_GLOBAL(tab, &kp TAB, K3 K2 K1)
         COMBO_GLOBAL(enter, &kp ENTER, K7 K6 K5)
         COMBO_GLOBAL(esc, &kp ESC, K6 K5 K4)
-        
-        COMBO_GLOBAL(access_sym, &mo SYM, K11 K12)
-        COMBO_GLOBAL(access_nav, &to NAV, K0 K12)
-        COMBO_GLOBAL(access_mouse, &to MOUSE, K0 K11)
-        COMBO_GLOBAL(access_func, &to FUNC, K0 K10)
+
+        COMBO_ACCESS(access_sym, &mo SYM, K11 K12)
+        COMBO_ACCESS(access_nav, &to NAV, K0 K12)
+        COMBO_ACCESS(access_mouse, &to MOUSE, K0 K11)
+        COMBO_ACCESS(access_func, &to FUNC, K0 K10)
 
         /* ALPHA */
         COMBO_LAYER(alpha_d, &kp D, K3 K7, BASE)
@@ -129,6 +155,7 @@
         COMBO_LAYER(sym_hash, &kp HASH, K1 K7, SYM)
         COMBO_LAYER(sym_dollar, &kp DLLR, K3 K5, SYM)
         COMBO_LAYER(sym_tilde, &kp TILDE, K1 K3, SYM)
+
 
         /* FUNC */
         COMBO_LAYER(func_f7, &kp F7, K3 K7, FUNC)
@@ -194,19 +221,19 @@
             >;
         };
 
-        media_layer {
-            bindings = <
-                &trans          &kp C_NEXT  &kp C_PP    &kp C_PREV
-                &none           &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
-                &none           &none       &none       &none       &trans
-            >;
-        };
-
         sys_layer {
             bindings = <
                 &trans          &out OUT_TOG &bt BT_SEL 4 &bt BT_SEL 3
                 &none           &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
                 &none           &none        &none        &bt BT_CLR  &mo MEDIA
+            >;
+        };
+
+        media_layer {
+            bindings = <
+                &trans          &kp C_NEXT  &kp C_PP    &kp C_PREV
+                &none           &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
+                &none           &none       &none       &none       &trans
             >;
         };
     };
