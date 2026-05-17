@@ -66,21 +66,21 @@
 / {
     #define COMBO_GLOBAL(NAME, BINDINGS, KEYPOS) \
     combo_##NAME { \
-        timeout-ms = <20>; \
+        timeout-ms = <40>; \
         bindings = <BINDINGS>; \
         key-positions = <KEYPOS>; \
     };
 
     #define COMBO_ACCESS(NAME, BINDINGS, KEYPOS) \
     combo_##NAME { \
-        timeout-ms = <20>; \
+        timeout-ms = <40>; \
         bindings = <BINDINGS>; \
         key-positions = <KEYPOS>; \
     };
 
     #define COMBO_LAYER(NAME, BINDINGS, KEYPOS, LAYERS) \
     combo_##NAME { \
-        timeout-ms = <20>; \
+        timeout-ms = <40>; \
         bindings = <BINDINGS>; \
         key-positions = <KEYPOS>; \
         layers = <LAYERS>; \
