@@ -26,7 +26,3 @@
         >;
     };
 };
-
-&tessera_transform {
-    col-offset = <13>;
-};

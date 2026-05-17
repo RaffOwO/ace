@@ -1,13 +1,13 @@
 # ZMK Config for Tessera
 
-Tessera is the split 26-key version of TheCardV2: two mirrored 13-key halves running the same Taipo-inspired local chord logic.
+Tessera is the two-card version of TheCardV2: each 13-key card runs the same Taipo-inspired local chord logic as a standalone keyboard.
 
 ## Build Targets
 
 - Board: `nice_nano_v2`
 - Left shield: `tessera_left`
 - Right shield: `tessera_right`
-- Right half is the central side.
+- Both shields build standalone firmware. There is no ZMK central/peripheral split role.
 
 ## Local Build
 
@@ -31,16 +31,15 @@ Build the right half:
 
 Current local blocker: CMake is not installed or not on PATH.
 
-## Split Model
+## Keymap Model
 
-The keymap has 26 global positions:
+Each card has 13 local positions:
 
 ```text
-Left half:  L0..L12  = positions 0..12
-Right half: R0..R12  = positions 13..25
+K0..K12 = positions 0..12
 ```
 
-There are no cross-half combos. Each half has the same local alpha, number, symbol, navigation, mouse, function, system, media, and mouse-acceleration logic.
+Each card has the same local alpha, number, symbol, navigation, mouse, function, system, and media logic.
 
 ## Local Half Pin Order
 
