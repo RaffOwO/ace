@@ -24,7 +24,7 @@
 #define MEDIA 7
 
 #define COMBO_TIMEOUT 70
-#define COMBO_LAYERS 0
+#define COMBO_LAYERS BASE
 #define STICKY_TIMEOUT 500
 
 #define L0 0
@@ -40,6 +40,7 @@
 #define L10 10
 #define L11 11
 #define L12 12
+
 #define R0 13
 #define R1 14
 #define R2 15
@@ -60,18 +61,44 @@
 };
 
 / {
+    behaviors {
+        /*
+         * K0 behavior:
+         *   tap  -> BASE / panic reset
+         *   hold -> SYS
+         *
+         * tap-preferred is important because K0 is also used in combos:
+         *   K0 + K12 -> NAV
+         *   K0 + K11 -> MOUSE
+         *   K0 + K10 -> FUNC
+         *
+         * Do NOT use raw &mo SYS on K0, because it activates SYS immediately
+         * and steals the combo context.
+         */
+        k0_sys: k0_sys {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <180>;
+            quick-tap-ms = <0>;
+            bindings = <&mo>, <&to>;
+        };
+    };
+
     #define TCOMBO(NAME, BINDINGS, LEFT_KEYPOS, RIGHT_KEYPOS) \
     combo_l_##NAME { \
         timeout-ms = <COMBO_TIMEOUT>; \
         bindings = <BINDINGS>; \
         key-positions = <LEFT_KEYPOS>; \
         layers = <COMBO_LAYERS>; \
+        slow-release; \
     }; \
     combo_r_##NAME { \
         timeout-ms = <COMBO_TIMEOUT>; \
         bindings = <BINDINGS>; \
         key-positions = <RIGHT_KEYPOS>; \
         layers = <COMBO_LAYERS>; \
+        slow-release; \
     };
 
     #define TCOMBO_ON(NAME, BINDINGS, LEFT_KEYPOS, RIGHT_KEYPOS, LAYERS) \
@@ -80,12 +107,14 @@
         bindings = <BINDINGS>; \
         key-positions = <LEFT_KEYPOS>; \
         layers = <LAYERS>; \
+        slow-release; \
     }; \
     combo_r_##NAME { \
         timeout-ms = <COMBO_TIMEOUT>; \
         bindings = <BINDINGS>; \
         key-positions = <RIGHT_KEYPOS>; \
         layers = <LAYERS>; \
+        slow-release; \
     };
 
     combos {
@@ -167,6 +196,7 @@
         TCOMBO_ON(mod_ctrl, &sk LEFT_CONTROL, L8, R8, BASE)
         TCOMBO_ON(mod_gui, &sk LEFT_GUI, L9, R9, BASE)
         TCOMBO_ON(mod_alt, &sk LEFT_ALT, L10, R10, BASE)
+
         TCOMBO_ON(mouse_btn4, &mkp MB4, L4 L1, R4 R1, MOUSE)
         TCOMBO_ON(mouse_btn5, &mkp MB5, L4 L3, R4 R3, MOUSE)
     };
@@ -176,13 +206,13 @@
 
         base_layer {
             bindings = <
-                &mo SYS         &kp S       &kp N       &kp I
-                &kp A           &kp O       &kp T       &kp E
-                &none           &none       &none       &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &k0_sys SYS BASE &kp S       &kp N       &kp I
+                &kp A            &kp O       &kp T       &kp E
+                &trans            &trans       &trans       &lt NUM BSPC &mt LEFT_SHIFT SPACE
 
-                &mo SYS         &kp S       &kp N       &kp I
-                &kp A           &kp O       &kp T       &kp E
-                &none           &none       &none       &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &k0_sys SYS BASE &kp S       &kp N       &kp I
+                &kp A            &kp O       &kp T       &kp E
+                &trans            &trans       &trans       &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -190,11 +220,11 @@
             bindings = <
                 &to BASE        &kp N9      &kp N8      &kp N7
                 &kp N0          &kp N3      &kp N2      &kp N1
-                &none           &none       &none       &trans      &mt LEFT_SHIFT SPACE
+                &trans           &trans       &trans       &trans      &mt LEFT_SHIFT SPACE
 
                 &to BASE        &kp N9      &kp N8      &kp N7
                 &kp N0          &kp N3      &kp N2      &kp N1
-                &none           &none       &none       &trans      &mt LEFT_SHIFT SPACE
+                &trans           &trans       &trans       &trans      &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -202,11 +232,11 @@
             bindings = <
                 &to BASE        &kp RPAR    &kp COLON   &kp LPAR
                 &kp SQT         &kp RBKT    &kp EQUAL   &kp LBKT
-                &none           &none       &none       &trans      &trans
+                &trans           &trans       &trans       &trans      &trans
 
                 &to BASE        &kp RPAR    &kp COLON   &kp LPAR
                 &kp SQT         &kp RBKT    &kp EQUAL   &kp LBKT
-                &none           &none       &none       &trans      &trans
+                &trans           &trans       &trans       &trans      &trans
             >;
         };
 
@@ -214,23 +244,23 @@
             bindings = <
                 &to BASE        &kp END     &kp UP      &kp HOME
                 &kp DEL         &kp RIGHT   &kp DOWN    &kp LEFT
-                &none           &none       &none       &kp BSPC    &kp LEFT_SHIFT
+                &trans           &trans       &trans       &kp BSPC    &kp LEFT_SHIFT
 
                 &to BASE        &kp END     &kp UP      &kp HOME
                 &kp DEL         &kp RIGHT   &kp DOWN    &kp LEFT
-                &none           &none       &none       &kp BSPC    &kp LEFT_SHIFT
+                &trans           &trans       &trans       &kp BSPC    &kp LEFT_SHIFT
             >;
         };
 
         mouse_layer {
             bindings = <
                 &to BASE        &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
-                &none           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
-                &none           &none          &mkp MCLK      &mkp RCLK     &mkp LCLK
+                &trans           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
+                &trans           &trans          &mkp MCLK      &mkp RCLK     &mkp LCLK
 
                 &to BASE        &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
-                &none           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
-                &none           &none          &mkp MCLK      &mkp RCLK     &mkp LCLK
+                &trans           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
+                &trans           &trans          &mkp MCLK      &mkp RCLK     &mkp LCLK
             >;
         };
 
@@ -238,35 +268,35 @@
             bindings = <
                 &to BASE        &kp F6      &kp F5      &kp F4
                 &kp F12         &kp F3      &kp F2      &kp F1
-                &none           &none       &none       &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &trans           &trans       &trans       &lt NUM BSPC &mt LEFT_SHIFT SPACE
 
                 &to BASE        &kp F6      &kp F5      &kp F4
                 &kp F12         &kp F3      &kp F2      &kp F1
-                &none           &none       &none       &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &trans           &trans       &trans       &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
         sys_layer {
             bindings = <
                 &trans          &out OUT_TOG &bt BT_SEL 4 &bt BT_SEL 3
-                &none           &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
-                &none           &none        &none        &bt BT_CLR  &mo MEDIA
+                &trans           &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
+                &trans           &trans        &trans        &bt BT_CLR  &mo MEDIA
 
                 &trans          &out OUT_TOG &bt BT_SEL 4 &bt BT_SEL 3
-                &none           &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
-                &none           &none        &none        &bt BT_CLR  &mo MEDIA
+                &trans           &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
+                &trans           &trans        &trans        &bt BT_CLR  &mo MEDIA
             >;
         };
 
         media_layer {
             bindings = <
                 &trans          &kp C_NEXT  &kp C_PP    &kp C_PREV
-                &none           &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
-                &none           &none       &none       &none       &trans
+                &trans           &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
+                &trans           &trans       &trans       &trans       &trans
 
                 &trans          &kp C_NEXT  &kp C_PP    &kp C_PREV
-                &none           &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
-                &none           &none       &none       &none       &trans
+                &trans           &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
+                &trans           &trans       &trans       &trans       &trans
             >;
         };
     };
