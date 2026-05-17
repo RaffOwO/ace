@@ -83,7 +83,7 @@
             quick-tap-ms = <0>;
             bindings = <&mo>, <&to>;
         };
-    };
+    }; //behaviors
 
     #define TCOMBO(NAME, BINDINGS, LEFT_KEYPOS, RIGHT_KEYPOS) \
     combo_l_##NAME { \
@@ -124,7 +124,8 @@
         TCOMBO(enter, &kp ENTER, L7 L6 L5, R7 R6 R5)
         TCOMBO(esc, &kp ESC, L6 L5 L4, R6 R5 R4)
 
-        TCOMBO(access_sym, &to SYM, L11 L12, R11 R12)
+        TCOMBO(access_sym, &mo SYM, L11 L12, R11 R12)
+
         TCOMBO(access_nav, &to NAV, L0 L12, R0 R12)
         TCOMBO(access_mouse, &to MOUSE, L0 L11, R0 R11)
         TCOMBO(access_func, &to FUNC, L0 L10, R0 R10)
