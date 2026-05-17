@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: MIT
+
+description: Side-local persistent layer switch behavior
+
+compatible: "zmk,behavior-side-layer"
+
+include: one_param.yaml
+
+properties:
+  left-layers:
+    type: array
+    required: true
+    description: Persistent layers owned by the left side. First entry is the side base layer.
+  right-layers:
+    type: array
+    required: true
+    description: Persistent layers owned by the right side. First entry is the side base layer.

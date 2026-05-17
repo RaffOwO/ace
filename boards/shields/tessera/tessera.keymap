@@ -5,8 +5,8 @@
  *   Left card:  L0..L12  = positions 0..12
  *   Right card: R0..R12  = positions 13..25
  *
- * The keyboard is a real ZMK split with one Bluetooth host connection, but
- * all chords are defined as side-local left/right combo pairs.
+ * Each card owns its own virtual layer stack. Shared OS modifiers remain
+ * normal HID modifiers, so Ctrl/Alt/GUI/Shift can combine across both cards.
  */
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
@@ -15,13 +15,20 @@
 #include <dt-bindings/zmk/pointing.h>
 
 #define BASE 0
-#define NUM 1
-#define SYM 2
-#define NAV 3
-#define MOUSE 4
-#define FUNC 5
-#define SYS 6
-#define MEDIA 7
+#define L_BASE 1
+#define R_BASE 2
+#define L_NAV 3
+#define R_NAV 4
+#define L_MOUSE 5
+#define R_MOUSE 6
+#define L_FUNC 7
+#define R_FUNC 8
+#define L_NUM 9
+#define R_NUM 10
+#define L_SYM 11
+#define R_SYM 12
+#define SYS 13
+#define MEDIA 14
 
 #define COMBO_TIMEOUT 20
 #define STICKY_TIMEOUT 3000
@@ -61,28 +68,22 @@
 
 / {
     behaviors {
-        /*
-         * K0 behavior:
-         *   tap  -> BASE / panic reset
-         *   hold -> SYS
-         *
-         * tap-preferred is important because K0 is also used in combos:
-         *   K0 + K12 -> NAV
-         *   K0 + K11 -> MOUSE
-         *   K0 + K10 -> FUNC
-         *
-         * Do NOT use raw &mo SYS on K0, because it activates SYS immediately
-         * and steals the combo context.
-         */
+        tsl: tessera_side_layer {
+            compatible = "zmk,behavior-side-layer";
+            #binding-cells = <1>;
+            left-layers = <L_BASE L_NAV L_MOUSE L_FUNC>;
+            right-layers = <R_BASE R_NAV R_MOUSE R_FUNC>;
+        };
+
         k0_sys: k0_sys {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
             tapping-term-ms = <180>;
             quick-tap-ms = <0>;
-            bindings = <&mo>, <&to>;
+            bindings = <&mo>, <&tsl>;
         };
-    }; //behaviors
+    };
 
     #define TCOMBO(NAME, BINDINGS, LEFT_KEYPOS, RIGHT_KEYPOS) \
     combo_l_##NAME { \
@@ -98,19 +99,33 @@
         slow-release; \
     };
 
-    #define TCOMBO_ON(NAME, BINDINGS, LEFT_KEYPOS, RIGHT_KEYPOS, LAYERS) \
+    #define TCOMBO_SPLIT(NAME, LEFT_BINDING, RIGHT_BINDING, LEFT_KEYPOS, RIGHT_KEYPOS) \
+    combo_l_##NAME { \
+        timeout-ms = <COMBO_TIMEOUT>; \
+        bindings = <LEFT_BINDING>; \
+        key-positions = <LEFT_KEYPOS>; \
+        slow-release; \
+    }; \
+    combo_r_##NAME { \
+        timeout-ms = <COMBO_TIMEOUT>; \
+        bindings = <RIGHT_BINDING>; \
+        key-positions = <RIGHT_KEYPOS>; \
+        slow-release; \
+    };
+
+    #define TCOMBO_SIDE(NAME, BINDINGS, LEFT_KEYPOS, RIGHT_KEYPOS, LEFT_LAYER, RIGHT_LAYER) \
     combo_l_##NAME { \
         timeout-ms = <COMBO_TIMEOUT>; \
         bindings = <BINDINGS>; \
         key-positions = <LEFT_KEYPOS>; \
-        layers = <LAYERS>; \
+        layers = <LEFT_LAYER>; \
         slow-release; \
     }; \
     combo_r_##NAME { \
         timeout-ms = <COMBO_TIMEOUT>; \
         bindings = <BINDINGS>; \
         key-positions = <RIGHT_KEYPOS>; \
-        layers = <LAYERS>; \
+        layers = <RIGHT_LAYER>; \
         slow-release; \
     };
 
@@ -121,82 +136,77 @@
         TCOMBO(enter, &kp ENTER, L7 L6 L5, R7 R6 R5)
         TCOMBO(esc, &kp ESC, L6 L5 L4, R6 R5 R4)
 
-        TCOMBO(access_sym, &mo SYM, L11 L12, R11 R12)
+        TCOMBO_SPLIT(access_sym, &mo L_SYM, &mo R_SYM, L11 L12, R11 R12)
+        TCOMBO_SPLIT(access_nav, &tsl L_NAV, &tsl R_NAV, L0 L12, R0 R12)
+        TCOMBO_SPLIT(access_mouse, &tsl L_MOUSE, &tsl R_MOUSE, L0 L11, R0 R11)
+        TCOMBO_SPLIT(access_func, &tsl L_FUNC, &tsl R_FUNC, L0 L10, R0 R10)
 
-        TCOMBO(access_nav, &to NAV, L0 L12, R0 R12)
-        TCOMBO(access_mouse, &to MOUSE, L0 L11, R0 R11)
-        TCOMBO(access_func, &to FUNC, L0 L10, R0 R10)
+        TCOMBO_SIDE(alpha_d, &kp D, L3 L7, R3 R7, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_l, &kp L, L2 L6, R2 R6, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_b, &kp B, L1 L5, R1 R5, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_r, &kp R, L2 L3, R2 R3, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_c, &kp C, L1 L2, R1 R2, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_h, &kp H, L6 L7, R6 R7, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_u, &kp U, L5 L6, R5 R6, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_m, &kp M, L1 L3, R1 R3, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_w, &kp W, L5 L7, R5 R7, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_p, &kp P, L4 L5, R4 R5, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_y, &kp Y, L2 L7, R2 R7, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_g, &kp G, L2 L5, R2 R5, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_f, &kp F, L3 L6, R3 R6, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_v, &kp V, L1 L4, R1 R4, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_k, &kp K, L3 L5, R3 R5, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_z, &kp Z, L3 L4, R3 R4, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_x, &kp X, L1 L7, R1 R7, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_j, &kp J, L4 L7, R4 R7, L_BASE, R_BASE)
+        TCOMBO_SIDE(alpha_q, &kp Q, L1 L6, R1 R6, L_BASE, R_BASE)
 
-        TCOMBO_ON(alpha_d, &kp D, L3 L7, R3 R7, BASE)
-        TCOMBO_ON(alpha_l, &kp L, L2 L6, R2 R6, BASE)
-        TCOMBO_ON(alpha_b, &kp B, L1 L5, R1 R5, BASE)
-        TCOMBO_ON(alpha_r, &kp R, L2 L3, R2 R3, BASE)
-        TCOMBO_ON(alpha_c, &kp C, L1 L2, R1 R2, BASE)
-        TCOMBO_ON(alpha_h, &kp H, L6 L7, R6 R7, BASE)
-        TCOMBO_ON(alpha_u, &kp U, L5 L6, R5 R6, BASE)
-        TCOMBO_ON(alpha_m, &kp M, L1 L3, R1 R3, BASE)
-        TCOMBO_ON(alpha_w, &kp W, L5 L7, R5 R7, BASE)
-        TCOMBO_ON(alpha_p, &kp P, L4 L5, R4 R5, BASE)
-        TCOMBO_ON(alpha_y, &kp Y, L2 L7, R2 R7, BASE)
-        TCOMBO_ON(alpha_g, &kp G, L2 L5, R2 R5, BASE)
-        TCOMBO_ON(alpha_f, &kp F, L3 L6, R3 R6, BASE)
-        TCOMBO_ON(alpha_v, &kp V, L1 L4, R1 R4, BASE)
-        TCOMBO_ON(alpha_k, &kp K, L3 L5, R3 R5, BASE)
-        TCOMBO_ON(alpha_z, &kp Z, L3 L4, R3 R4, BASE)
-        TCOMBO_ON(alpha_x, &kp X, L1 L7, R1 R7, BASE)
-        TCOMBO_ON(alpha_j, &kp J, L4 L7, R4 R7, BASE)
-        TCOMBO_ON(alpha_q, &kp Q, L1 L6, R1 R6, BASE)
+        TCOMBO_SIDE(num_4, &kp N4, L3 L7, R3 R7, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_5, &kp N5, L2 L6, R2 R6, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_6, &kp N6, L1 L5, R1 R5, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_plus, &kp PLUS, L2 L3, R2 R3, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_minus, &kp MINUS, L1 L2, R1 R2, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_star, &kp STAR, L6 L7, R6 R7, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_slash, &kp FSLH, L5 L6, R5 R6, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_comma, &kp COMMA, L1 L4, R1 R4, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_dot, &kp DOT, L4 L5, R4 R5, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_semi, &kp SEMI, L3 L4, R3 R4, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_colon, &kp COLON, L4 L7, R4 R7, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_equal, &kp EQUAL, L1 L3, R1 R3, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_percent, &kp PRCNT, L2 L7, R2 R7, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_caret, &kp CARET, L3 L6, R3 R6, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_lt, &kp LT, L2 L5, R2 R5, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_gt, &kp GT, L1 L6, R1 R6, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_lpar, &kp LPAR, L1 L7, R1 R7, L_NUM, R_NUM)
+        TCOMBO_SIDE(num_rpar, &kp RPAR, L3 L5, R3 R5, L_NUM, R_NUM)
 
-        TCOMBO_ON(num_4, &kp N4, L3 L7, R3 R7, NUM)
-        TCOMBO_ON(num_5, &kp N5, L2 L6, R2 R6, NUM)
-        TCOMBO_ON(num_6, &kp N6, L1 L5, R1 R5, NUM)
-        TCOMBO_ON(num_plus, &kp PLUS, L2 L3, R2 R3, NUM)
-        TCOMBO_ON(num_minus, &kp MINUS, L1 L2, R1 R2, NUM)
-        TCOMBO_ON(num_star, &kp STAR, L6 L7, R6 R7, NUM)
-        TCOMBO_ON(num_slash, &kp FSLH, L5 L6, R5 R6, NUM)
-        TCOMBO_ON(num_comma, &kp COMMA, L1 L4, R1 R4, NUM)
-        TCOMBO_ON(num_dot, &kp DOT, L4 L5, R4 R5, NUM)
-        TCOMBO_ON(num_semi, &kp SEMI, L3 L4, R3 R4, NUM)
-        TCOMBO_ON(num_colon, &kp COLON, L4 L7, R4 R7, NUM)
-        TCOMBO_ON(num_equal, &kp EQUAL, L1 L3, R1 R3, NUM)
-        TCOMBO_ON(num_percent, &kp PRCNT, L2 L7, R2 R7, NUM)
-        TCOMBO_ON(num_caret, &kp CARET, L3 L6, R3 R6, NUM)
-        TCOMBO_ON(num_lt, &kp LT, L2 L5, R2 R5, NUM)
-        TCOMBO_ON(num_gt, &kp GT, L1 L6, R1 R6, NUM)
-        TCOMBO_ON(num_lpar, &kp LPAR, L1 L7, R1 R7, NUM)
-        TCOMBO_ON(num_rpar, &kp RPAR, L3 L5, R3 R5, NUM)
+        TCOMBO_SIDE(sym_semi, &kp SEMI, L2 L6, R2 R6, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_slash, &kp FSLH, L2 L7, R2 R7, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_bslash, &kp BSLH, L3 L6, R3 R6, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_lt, &kp LT, L2 L3, R2 R3, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_gt, &kp GT, L1 L2, R1 R2, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_lbrace, &kp LBRC, L6 L7, R6 R7, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_rbrace, &kp RBRC, L5 L6, R5 R6, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_dquote, &kp DQT, L4 L5, R4 R5, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_grave, &kp GRAVE, L1 L4, R1 R4, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_under, &kp UNDER, L5 L7, R5 R7, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_pipe, &kp PIPE, L3 L7, R3 R7, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_amp, &kp AMPS, L2 L5, R2 R5, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_at, &kp AT, L1 L5, R1 R5, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_qmark, &kp QMARK, L4 L7, R4 R7, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_exclaim, &kp EXCL, L3 L4, R3 R4, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_hash, &kp HASH, L1 L7, R1 R7, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_dollar, &kp DLLR, L3 L5, R3 R5, L_SYM, R_SYM)
+        TCOMBO_SIDE(sym_tilde, &kp TILDE, L1 L3, R1 R3, L_SYM, R_SYM)
 
-        TCOMBO_ON(sym_semi, &kp SEMI, L2 L6, R2 R6, SYM)
-        TCOMBO_ON(sym_slash, &kp FSLH, L2 L7, R2 R7, SYM)
-        TCOMBO_ON(sym_bslash, &kp BSLH, L3 L6, R3 R6, SYM)
-        TCOMBO_ON(sym_lt, &kp LT, L2 L3, R2 R3, SYM)
-        TCOMBO_ON(sym_gt, &kp GT, L1 L2, R1 R2, SYM)
-        TCOMBO_ON(sym_lbrace, &kp LBRC, L6 L7, R6 R7, SYM)
-        TCOMBO_ON(sym_rbrace, &kp RBRC, L5 L6, R5 R6, SYM)
-        TCOMBO_ON(sym_dquote, &kp DQT, L4 L5, R4 R5, SYM)
-        TCOMBO_ON(sym_grave, &kp GRAVE, L1 L4, R1 R4, SYM)
-        TCOMBO_ON(sym_under, &kp UNDER, L5 L7, R5 R7, SYM)
-        TCOMBO_ON(sym_pipe, &kp PIPE, L3 L7, R3 R7, SYM)
-        TCOMBO_ON(sym_amp, &kp AMPS, L2 L5, R2 R5, SYM)
-        TCOMBO_ON(sym_at, &kp AT, L1 L5, R1 R5, SYM)
-        TCOMBO_ON(sym_qmark, &kp QMARK, L4 L7, R4 R7, SYM)
-        TCOMBO_ON(sym_exclaim, &kp EXCL, L3 L4, R3 R4, SYM)
-        TCOMBO_ON(sym_hash, &kp HASH, L1 L7, R1 R7, SYM)
-        TCOMBO_ON(sym_dollar, &kp DLLR, L3 L5, R3 R5, SYM)
-        TCOMBO_ON(sym_tilde, &kp TILDE, L1 L3, R1 R3, SYM)
+        TCOMBO_SIDE(func_f7, &kp F7, L3 L7, R3 R7, L_FUNC, R_FUNC)
+        TCOMBO_SIDE(func_f8, &kp F8, L2 L6, R2 R6, L_FUNC, R_FUNC)
+        TCOMBO_SIDE(func_f9, &kp F9, L1 L5, R1 R5, L_FUNC, R_FUNC)
+        TCOMBO_SIDE(func_f10, &kp F10, L2 L3, R2 R3, L_FUNC, R_FUNC)
+        TCOMBO_SIDE(func_f11, &kp F11, L1 L2, R1 R2, L_FUNC, R_FUNC)
 
-        TCOMBO_ON(func_f7, &kp F7, L3 L7, R3 R7, FUNC)
-        TCOMBO_ON(func_f8, &kp F8, L2 L6, R2 R6, FUNC)
-        TCOMBO_ON(func_f9, &kp F9, L1 L5, R1 R5, FUNC)
-        TCOMBO_ON(func_f10, &kp F10, L2 L3, R2 R3, FUNC)
-        TCOMBO_ON(func_f11, &kp F11, L1 L2, R1 R2, FUNC)
-
-        TCOMBO_ON(mod_ctrl, &sk LEFT_CONTROL, L8, R8, BASE)
-        TCOMBO_ON(mod_gui, &sk LEFT_GUI, L9, R9, BASE)
-        TCOMBO_ON(mod_alt, &sk LEFT_ALT, L10, R10, BASE)
-
-        TCOMBO_ON(mouse_btn4, &mkp MB4, L4 L1, R4 R1, MOUSE)
-        TCOMBO_ON(mouse_btn5, &mkp MB5, L4 L3, R4 R3, MOUSE)
+        TCOMBO_SIDE(mouse_btn4, &mkp MB4, L4 L1, R4 R1, L_MOUSE, R_MOUSE)
+        TCOMBO_SIDE(mouse_btn5, &mkp MB5, L4 L3, R4 R3, L_MOUSE, R_MOUSE)
     };
 
     keymap {
@@ -204,97 +214,181 @@
 
         base_layer {
             bindings = <
-                &k0_sys SYS BASE &kp S       &kp N       &kp I
-                &kp A            &kp O       &kp T       &kp E
-                &trans            &trans       &trans       &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &k0_sys SYS L_BASE &kp S       &kp N       &kp I
+                &kp A              &kp O       &kp T       &kp E
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &lt L_NUM BSPC &mt LEFT_SHIFT SPACE
 
-                &k0_sys SYS BASE &kp S       &kp N       &kp I
-                &kp A            &kp O       &kp T       &kp E
-                &trans            &trans       &trans       &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &k0_sys SYS R_BASE &kp S       &kp N       &kp I
+                &kp A              &kp O       &kp T       &kp E
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &lt R_NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
-        num_layer {
+        l_base_layer {
             bindings = <
-                &k0_sys SYS BASE &kp N9      &kp N8      &kp N7
-                &kp N0          &kp N3      &kp N2      &kp N1
-                &trans           &trans       &trans       &trans      &mt LEFT_SHIFT SPACE
+                &k0_sys SYS L_BASE &kp S       &kp N       &kp I
+                &kp A              &kp O       &kp T       &kp E
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &lt L_NUM BSPC &mt LEFT_SHIFT SPACE
 
-                &k0_sys SYS BASE &kp N9      &kp N8      &kp N7
-                &kp N0          &kp N3      &kp N2      &kp N1
-                &trans           &trans       &trans       &trans      &mt LEFT_SHIFT SPACE
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans      &trans
             >;
         };
 
-        sym_layer {
+        r_base_layer {
             bindings = <
-                &k0_sys SYS BASE &kp RPAR    &kp COLON   &kp LPAR
-                &kp SQT         &kp RBKT    &kp EQUAL   &kp LBKT
-                &trans           &trans       &trans       &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans      &trans
 
-                &k0_sys SYS BASE &kp RPAR    &kp COLON   &kp LPAR
-                &kp SQT         &kp RBKT    &kp EQUAL   &kp LBKT
-                &trans           &trans       &trans       &trans      &trans
+                &k0_sys SYS R_BASE &kp S       &kp N       &kp I
+                &kp A              &kp O       &kp T       &kp E
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &lt R_NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
-        nav_layer {
+        l_nav_layer {
             bindings = <
-                &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
-                &kp DEL         &kp RIGHT   &kp DOWN    &kp LEFT
-                &trans           &trans       &trans       &kp BSPC    &kp LEFT_SHIFT
+                &k0_sys SYS L_BASE &kp END     &kp UP      &kp HOME
+                &kp DEL            &kp RIGHT   &kp DOWN    &kp LEFT
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &kp BSPC    &kp LEFT_SHIFT
 
-                &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
-                &kp DEL         &kp RIGHT   &kp DOWN    &kp LEFT
-                &trans           &trans       &trans       &kp BSPC    &kp LEFT_SHIFT
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans      &trans
             >;
         };
 
-        mouse_layer {
+        r_nav_layer {
             bindings = <
-                &k0_sys SYS BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
-                &trans           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
-                &trans           &trans          &mkp MCLK      &mkp RCLK     &mkp LCLK
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans      &trans
 
-                &k0_sys SYS BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
-                &trans           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
-                &trans           &trans          &mkp MCLK      &mkp RCLK     &mkp LCLK
+                &k0_sys SYS R_BASE &kp END     &kp UP      &kp HOME
+                &kp DEL            &kp RIGHT   &kp DOWN    &kp LEFT
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &kp BSPC    &kp LEFT_SHIFT
             >;
         };
 
-        func_layer {
+        l_mouse_layer {
             bindings = <
-                &k0_sys SYS BASE &kp F6      &kp F5      &kp F4
-                &kp F12         &kp F3      &kp F2      &kp F1
-                &trans           &trans       &trans       &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &k0_sys SYS L_BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
+                &none              &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
+                &sk LEFT_CONTROL   &sk LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
 
-                &k0_sys SYS BASE &kp F6      &kp F5      &kp F4
-                &kp F12         &kp F3      &kp F2      &kp F1
-                &trans           &trans       &trans       &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &trans             &trans          &trans         &trans
+                &trans             &trans          &trans         &trans
+                &trans             &trans          &trans         &trans        &trans
+            >;
+        };
+
+        r_mouse_layer {
+            bindings = <
+                &trans             &trans          &trans         &trans
+                &trans             &trans          &trans         &trans
+                &trans             &trans          &trans         &trans        &trans
+
+                &k0_sys SYS R_BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
+                &none              &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
+                &sk LEFT_CONTROL   &sk LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
+            >;
+        };
+
+        l_func_layer {
+            bindings = <
+                &k0_sys SYS L_BASE &kp F6      &kp F5      &kp F4
+                &kp F12            &kp F3      &kp F2      &kp F1
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &lt L_NUM BSPC &mt LEFT_SHIFT SPACE
+
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans      &trans
+            >;
+        };
+
+        r_func_layer {
+            bindings = <
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans      &trans
+
+                &k0_sys SYS R_BASE &kp F6      &kp F5      &kp F4
+                &kp F12            &kp F3      &kp F2      &kp F1
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &lt R_NUM BSPC &mt LEFT_SHIFT SPACE
+            >;
+        };
+
+        l_num_layer {
+            bindings = <
+                &k0_sys SYS L_BASE &kp N9      &kp N8      &kp N7
+                &kp N0             &kp N3      &kp N2      &kp N1
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
+
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans      &trans
+            >;
+        };
+
+        r_num_layer {
+            bindings = <
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans      &trans
+
+                &k0_sys SYS R_BASE &kp N9      &kp N8      &kp N7
+                &kp N0             &kp N3      &kp N2      &kp N1
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
+            >;
+        };
+
+        l_sym_layer {
+            bindings = <
+                &k0_sys SYS L_BASE &kp RPAR    &kp COLON   &kp LPAR
+                &kp SQT            &kp RBKT    &kp EQUAL   &kp LBKT
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &trans      &trans
+
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans      &trans
+            >;
+        };
+
+        r_sym_layer {
+            bindings = <
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans
+                &trans             &trans      &trans      &trans      &trans
+
+                &k0_sys SYS R_BASE &kp RPAR    &kp COLON   &kp LPAR
+                &kp SQT            &kp RBKT    &kp EQUAL   &kp LBKT
+                &sk LEFT_CONTROL   &sk LEFT_GUI &sk LEFT_ALT &trans      &trans
             >;
         };
 
         sys_layer {
             bindings = <
                 &trans          &out OUT_TOG &bt BT_SEL 4 &bt BT_SEL 3
-                &trans           &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
-                &trans           &trans        &studio_unlock &bt BT_CLR  &mo MEDIA
+                &trans          &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
+                &trans          &trans       &studio_unlock &bt BT_CLR  &mo MEDIA
 
                 &trans          &out OUT_TOG &bt BT_SEL 4 &bt BT_SEL 3
-                &trans           &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
-                &trans           &trans        &studio_unlock &bt BT_CLR  &mo MEDIA
+                &trans          &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
+                &trans          &trans       &studio_unlock &bt BT_CLR  &mo MEDIA
             >;
         };
 
         media_layer {
             bindings = <
                 &trans          &kp C_NEXT  &kp C_PP    &kp C_PREV
-                &trans           &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
-                &trans           &trans       &trans       &trans       &trans
+                &trans          &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
+                &trans          &trans      &trans      &trans       &trans
 
                 &trans          &kp C_NEXT  &kp C_PP    &kp C_PREV
-                &trans           &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
-                &trans           &trans       &trans       &trans       &trans
+                &trans          &kp C_VOL_UP &kp C_MUTE  &kp C_VOL_DN
+                &trans          &trans      &trans      &trans       &trans
             >;
         };
     };
