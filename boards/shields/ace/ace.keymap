@@ -29,7 +29,8 @@
 #define R_NUM 12
 #define SYS 13
 
-#define COMBO_TIMEOUT_TYPING 33
+#define COMBO_TIMEOUT_LEFT_TYPING 45
+#define COMBO_TIMEOUT_RIGHT_TYPING 33
 #define COMBO_TIMEOUT_ACCESS 66
 #define STICKY_TIMEOUT 3000
 
@@ -88,13 +89,13 @@
 
     #define TCOMBO(NAME, BINDINGS, LEFT_KEYPOS, RIGHT_KEYPOS) \
     combo_l_##NAME { \
-        timeout-ms = <COMBO_TIMEOUT_TYPING>; \
+        timeout-ms = <COMBO_TIMEOUT_LEFT_TYPING>; \
         bindings = <BINDINGS>; \
         key-positions = <LEFT_KEYPOS>; \
         slow-release; \
     }; \
     combo_r_##NAME { \
-        timeout-ms = <COMBO_TIMEOUT_TYPING>; \
+        timeout-ms = <COMBO_TIMEOUT_RIGHT_TYPING>; \
         bindings = <BINDINGS>; \
         key-positions = <RIGHT_KEYPOS>; \
         slow-release; \
@@ -116,14 +117,14 @@
 
     #define TCOMBO_SIDE(NAME, BINDINGS, LEFT_KEYPOS, RIGHT_KEYPOS, LEFT_LAYER, RIGHT_LAYER) \
     combo_l_##NAME { \
-        timeout-ms = <COMBO_TIMEOUT_TYPING>; \
+        timeout-ms = <COMBO_TIMEOUT_LEFT_TYPING>; \
         bindings = <BINDINGS>; \
         key-positions = <LEFT_KEYPOS>; \
         layers = <LEFT_LAYER>; \
         slow-release; \
     }; \
     combo_r_##NAME { \
-        timeout-ms = <COMBO_TIMEOUT_TYPING>; \
+        timeout-ms = <COMBO_TIMEOUT_RIGHT_TYPING>; \
         bindings = <BINDINGS>; \
         key-positions = <RIGHT_KEYPOS>; \
         layers = <RIGHT_LAYER>; \
