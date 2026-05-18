@@ -20,8 +20,6 @@
 
 #define COMBO_TIMEOUT_TYPING 33
 #define COMBO_TIMEOUT_ACCESS 66
-#define STICKY_TIMEOUT 3000
-
 #define L0 0
 #define L1 1
 #define L2 2
@@ -49,11 +47,6 @@
 #define R10 23
 #define R11 24
 #define R12 25
-
-&sk {
-    release-after-ms = <STICKY_TIMEOUT>;
-    quick-release;
-};
 
 / {
     behaviors {
@@ -204,11 +197,11 @@
             bindings = <
                 &k0_sys SYS BASE &kp I       &kp N       &kp S
                 &kp E            &kp T       &kp O       &kp A
-                &sk LEFT_CONTROL &sk LEFT_GUI &sk LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
 
                 &k0_sys SYS BASE &kp S       &kp N       &kp I
                 &kp A            &kp O       &kp T       &kp E
-                &sk LEFT_CONTROL &sk LEFT_GUI &sk LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -216,11 +209,11 @@
             bindings = <
                 &k0_sys SYS BASE &kp RPAR    &kp COLON   &kp LPAR
                 &kp SQT          &kp RBKT    &kp EQUAL   &kp LBKT
-                &sk LEFT_CONTROL &sk LEFT_GUI &sk LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
 
                 &k0_sys SYS BASE &kp RPAR    &kp COLON   &kp LPAR
                 &kp SQT          &kp RBKT    &kp EQUAL   &kp LBKT
-                &sk LEFT_CONTROL &sk LEFT_GUI &sk LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
             >;
         };
 
@@ -228,11 +221,11 @@
             bindings = <
                 &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
                 &kp DEL          &kp LEFT    &kp DOWN    &kp RIGHT
-                &sk LEFT_CONTROL &sk LEFT_GUI &sk LEFT_ALT &lt NUM BSPC &kp LEFT_SHIFT
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &kp LEFT_SHIFT
 
                 &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
                 &kp DEL          &kp RIGHT   &kp DOWN    &kp LEFT
-                &sk LEFT_CONTROL &sk LEFT_GUI &sk LEFT_ALT &lt NUM BSPC &kp LEFT_SHIFT
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &kp LEFT_SHIFT
             >;
         };
 
@@ -240,11 +233,11 @@
             bindings = <
                 &k0_sys SYS BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
                 &none            &mmv MOVE_LEFT  &mmv MOVE_DOWN &mmv MOVE_RIGHT
-                &sk LEFT_CONTROL &sk LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
+                &kp LEFT_CONTROL &kp LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
 
                 &k0_sys SYS BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
                 &none            &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
-                &sk LEFT_CONTROL &sk LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
+                &kp LEFT_CONTROL &kp LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
             >;
         };
 
@@ -252,11 +245,11 @@
             bindings = <
                 &k0_sys SYS BASE &kp F9      &kp F8      &kp F7
                 &kp F10          &kp F3      &kp F2      &kp F1
-                &sk LEFT_CONTROL &sk LEFT_GUI &sk LEFT_ALT &lt NUM BSPC &kp LEFT_SHIFT
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &kp LEFT_SHIFT
 
                 &k0_sys SYS BASE &kp F9      &kp F8      &kp F7
                 &kp F10          &kp F3      &kp F2      &kp F1
-                &sk LEFT_CONTROL &sk LEFT_GUI &sk LEFT_ALT &lt NUM BSPC &kp LEFT_SHIFT
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &kp LEFT_SHIFT
             >;
         };
 
@@ -264,11 +257,11 @@
             bindings = <
                 &k0_sys SYS BASE &kp N9      &kp N8      &kp N7
                 &kp N0           &kp N3      &kp N2      &kp N1
-                &sk LEFT_CONTROL &sk LEFT_GUI &sk LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
 
                 &k0_sys SYS BASE &kp N9      &kp N8      &kp N7
                 &kp N0           &kp N3      &kp N2      &kp N1
-                &sk LEFT_CONTROL &sk LEFT_GUI &sk LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
             >;
         };
 
