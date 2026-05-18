@@ -1,0 +1,10 @@
+description: ACE side-local chord resolver
+
+compatible: "zmk,behavior-ace-chord"
+
+include: two_param.yaml
+
+properties:
+  timeout-ms:
+    type: int
+    required: true
