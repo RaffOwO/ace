@@ -132,8 +132,6 @@
         TCOMBO(access_nav, &to NAV, L12 L0, R12 R0, GLOBAL_COMBO_LAYERS)
         TCOMBO(access_mouse, &to MOUSE, L11 L0, R11 R0, GLOBAL_COMBO_LAYERS)
         TCOMBO(access_func, &to FUNC, L10 L0, R10 R0, GLOBAL_COMBO_LAYERS)
-        TCOMBO(access_sym, &to SYM, L11 L0, R11 R0, NUM)
-
         TCOMBO(oneshot_ctrl, &sk LEFT_CONTROL, L11 L8, R11 R8, GLOBAL_COMBO_LAYERS)
         TCOMBO(oneshot_gui, &sk LEFT_GUI, L11 L9, R11 R9, GLOBAL_COMBO_LAYERS)
         TCOMBO(oneshot_alt, &sk LEFT_ALT, L11 L10, R11 R10, GLOBAL_COMBO_LAYERS)
@@ -280,11 +278,11 @@
 
         num_layer {
             bindings = <
-                &k0_sys SYS BASE &kp N9      &kp N8      &kp N7
+                &to SYM         &kp N9      &kp N8      &kp N7
                 &kp N0           &kp N3      &kp N2      &kp N1
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
 
-                &k0_sys SYS BASE &kp N9      &kp N8      &kp N7
+                &to SYM         &kp N9      &kp N8      &kp N7
                 &kp N0           &kp N3      &kp N2      &kp N1
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
             >;
