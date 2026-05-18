@@ -152,25 +152,25 @@
         TCOMBO_ACCESS(latch_gui, &kt LEFT_GUI, L12 L9, R12 R9)
         TCOMBO_ACCESS(latch_alt, &kt LEFT_ALT, L12 L10, R12 R10)
 
-        TCOMBO_LAYER(alpha_d, &kp D, L1 L4, R3 R7, BASE)
-        TCOMBO_LAYER(alpha_l, &kp L, L2 L5, R2 R6, BASE)
-        TCOMBO_LAYER(alpha_b, &kp B, L3 L6, R1 R5, BASE)
-        TCOMBO_LAYER(alpha_r, &kp R, L1 L2, R2 R3, BASE)
-        TCOMBO_LAYER(alpha_c, &kp C, L2 L3, R1 R2, BASE)
-        TCOMBO_LAYER(alpha_h, &kp H, L4 L5, R6 R7, BASE)
+        TCOMBO_LAYER(alpha_d, &kp D, L3 L7, R3 R7, BASE)
+        TCOMBO_LAYER(alpha_l, &kp L, L2 L6, R2 R6, BASE)
+        TCOMBO_LAYER(alpha_b, &kp B, L1 L5, R1 R5, BASE)
+        TCOMBO_LAYER(alpha_r, &kp R, L2 L3, R2 R3, BASE)
+        TCOMBO_LAYER(alpha_c, &kp C, L1 L2, R1 R2, BASE)
+        TCOMBO_LAYER(alpha_h, &kp H, L6 L7, R6 R7, BASE)
         TCOMBO_LAYER(alpha_u, &kp U, L5 L6, R5 R6, BASE)
-        TCOMBO_LAYER(alpha_w, &kp W, L1 L3, R3 R1, BASE)
-        TCOMBO_LAYER(alpha_m, &kp M, L4 L6, R7 R5, BASE)
-        TCOMBO_LAYER(alpha_z, &kp Z, L3 L4, R1 R7, BASE)
-        TCOMBO_LAYER(alpha_x, &kp X, L1 L6, R3 R5, BASE)
-        TCOMBO_LAYER(alpha_p, &kp P, L4 L2, R7 R2, BASE)
-        TCOMBO_LAYER(alpha_g, &kp G, L6 L2, R5 R2, BASE)
-        TCOMBO_LAYER(alpha_f, &kp F, L5 L1, R6 R3, BASE)
-        TCOMBO_LAYER(alpha_y, &kp Y, L7 L6, R4 R5, BASE)
-        TCOMBO_LAYER(alpha_v, &kp V, L5 L3, R6 R1, BASE)
-        TCOMBO_LAYER(alpha_q, &kp Q, L7 L1, R4 R3, BASE)
+        TCOMBO_LAYER(alpha_w, &kp W, L3 L1, R3 R1, BASE)
+        TCOMBO_LAYER(alpha_m, &kp M, L7 L5, R7 R5, BASE)
+        TCOMBO_LAYER(alpha_z, &kp Z, L1 L7, R1 R7, BASE)
+        TCOMBO_LAYER(alpha_x, &kp X, L3 L5, R3 R5, BASE)
+        TCOMBO_LAYER(alpha_p, &kp P, L7 L2, R7 R2, BASE)
+        TCOMBO_LAYER(alpha_g, &kp G, L5 L2, R5 R2, BASE)
+        TCOMBO_LAYER(alpha_f, &kp F, L6 L3, R6 R3, BASE)
+        TCOMBO_LAYER(alpha_y, &kp Y, L4 L5, R4 R5, BASE)
+        TCOMBO_LAYER(alpha_v, &kp V, L6 L1, R6 R1, BASE)
+        TCOMBO_LAYER(alpha_q, &kp Q, L4 L3, R4 R3, BASE)
         TCOMBO_LAYER(alpha_j, &kp J, L7 L4, R4 R7, BASE)
-        TCOMBO_LAYER(alpha_k, &kp K, L7 L3, R4 R1, BASE)
+        TCOMBO_LAYER(alpha_k, &kp K, L4 L1, R4 R1, BASE)
 
         TCOMBO_LAYER(num_4, &kp N4, L3 L7, R3 R7, NUM)
         TCOMBO_LAYER(num_5, &kp N5, L2 L6, R2 R6, NUM)
@@ -231,8 +231,8 @@
 
         base_layer {
             bindings = <
-                &k0_sys SYS BASE &kp I       &kp N       &kp S
-                &kp E            &kp T       &kp O       &kp A
+                &k0_sys SYS BASE &kp S       &kp N       &kp I
+                &kp A            &kp O       &kp T       &kp E
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &mt LEFT_SHIFT SPACE
 
                 &k0_sys SYS BASE &kp S       &kp N       &kp I
@@ -256,7 +256,7 @@
         nav_layer {
             bindings = <
                 &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
-                &kp DEL          &kp LEFT    &kp DOWN    &kp RIGHT
+                &kp DEL          &kp RIGHT   &kp DOWN    &kp LEFT
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &kp LEFT_SHIFT
 
                 &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
@@ -268,7 +268,7 @@
         mouse_layer {
             bindings = <
                 &k0_sys SYS BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
-                &none            &mmv MOVE_LEFT  &mmv MOVE_DOWN &mmv MOVE_RIGHT
+                &none            &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
                 &kp LEFT_CONTROL &kp LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
 
                 &k0_sys SYS BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
