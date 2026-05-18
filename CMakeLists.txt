@@ -1,4 +1,1 @@
-if ((NOT CONFIG_ZMK_SPLIT) OR CONFIG_ZMK_SPLIT_ROLE_CENTRAL)
-  target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_SUPERKEY app PRIVATE src/behavior_superkey.c)
-  target_sources_ifdef(CONFIG_ZMK_BEHAVIOR_SIDE_LAYER app PRIVATE src/behavior_side_layer.c)
-endif()
+# ACE currently uses stock ZMK behaviors only.

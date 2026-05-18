@@ -1,7 +1,1 @@
-config ZMK_BEHAVIOR_SUPERKEY
-    bool "ACE SuperKey behavior"
-    default y
-
-config ZMK_BEHAVIOR_SIDE_LAYER
-    bool "ACE side-local layer behavior"
-    default y
+# ACE currently uses stock ZMK behavior Kconfig only.
