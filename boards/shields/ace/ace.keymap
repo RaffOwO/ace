@@ -17,6 +17,7 @@
 #define FUNC 4
 #define NUM 5
 #define SYS 6
+#define MOUSE_ACCEL 7
 
 #define COMBO_TIMEOUT_TYPING 50
 #define COMBO_TIMEOUT_ACCESS 66
@@ -26,6 +27,12 @@
     release-after-ms = <ONESHOT_TIMEOUT>;
     quick-release;
 };
+
+&msc {
+    time-to-max-speed-ms = <500>;
+    acceleration-exponent = <1>;
+};
+
 #define L0 0
 #define L1 1
 #define L2 2
@@ -159,8 +166,8 @@
         TCOMBO_LAYER(alpha_c, &kp C, L1 L2, R1 R2, BASE)
         TCOMBO_LAYER(alpha_h, &kp H, L6 L7, R6 R7, BASE)
         TCOMBO_LAYER(alpha_u, &kp U, L5 L6, R5 R6, BASE)
-        TCOMBO_LAYER(alpha_w, &kp W, L3 L1, R3 R1, BASE)
-        TCOMBO_LAYER(alpha_m, &kp M, L7 L5, R7 R5, BASE)
+        TCOMBO_LAYER(alpha_m, &kp M, L3 L1, R3 R1, BASE)
+        TCOMBO_LAYER(alpha_w, &kp W, L7 L5, R7 R5, BASE)
         TCOMBO_LAYER(alpha_z, &kp Z, L1 L7, R1 R7, BASE)
         TCOMBO_LAYER(alpha_x, &kp X, L3 L5, R3 R5, BASE)
         TCOMBO_LAYER(alpha_p, &kp P, L7 L2, R7 R2, BASE)
@@ -256,7 +263,7 @@
         nav_layer {
             bindings = <
                 &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
-                &kp DEL          &kp RIGHT   &kp DOWN    &kp LEFT
+                &kp DEL          &kp LEFT    &kp DOWN    &kp RIGHT
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &lt NUM BSPC &kp LEFT_SHIFT
 
                 &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
@@ -267,12 +274,12 @@
 
         mouse_layer {
             bindings = <
-                &k0_sys SYS BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
-                &none            &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
+                &k0_sys SYS BASE &msc MOVE_UP   &mmv MOVE_UP   &msc MOVE_DOWN
+                &mo MOUSE_ACCEL  &mmv MOVE_LEFT  &mmv MOVE_DOWN &mmv MOVE_RIGHT
                 &kp LEFT_CONTROL &kp LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
 
-                &k0_sys SYS BASE &msc SCRL_DOWN &mmv MOVE_UP   &msc SCRL_UP
-                &none            &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
+                &k0_sys SYS BASE &msc MOVE_UP   &mmv MOVE_UP   &msc MOVE_DOWN
+                &mo MOUSE_ACCEL  &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
                 &kp LEFT_CONTROL &kp LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
             >;
         };
@@ -310,6 +317,18 @@
                 &trans          &out OUT_TOG &bt BT_SEL 4 &bt BT_SEL 3
                 &trans          &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
                 &trans          &trans       &studio_unlock &bt BT_CLR  &trans
+            >;
+        };
+
+        mouse_accel_layer {
+            bindings = <
+                &k0_sys SYS BASE &msc MOVE_Y(-1200) &mmv MOVE_Y(-1200) &msc MOVE_Y(1200)
+                &trans           &mmv MOVE_X(-1200) &mmv MOVE_Y(1200)  &mmv MOVE_X(1200)
+                &kp LEFT_CONTROL &kp LEFT_GUI       &mkp MCLK          &mkp RCLK       &mkp LCLK
+
+                &k0_sys SYS BASE &msc MOVE_Y(-1200) &mmv MOVE_Y(-1200) &msc MOVE_Y(1200)
+                &trans           &mmv MOVE_X(1200)  &mmv MOVE_Y(1200)  &mmv MOVE_X(-1200)
+                &kp LEFT_CONTROL &kp LEFT_GUI       &mkp MCLK          &mkp RCLK       &mkp LCLK
             >;
         };
     };
