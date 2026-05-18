@@ -152,6 +152,7 @@
         TCOMBO_ACCESS(access_nav, &to NAV, L12 L0, R12 R0)
         TCOMBO_ACCESS(access_mouse, &to MOUSE, L10 L0, R10 R0)
         TCOMBO_ACCESS(access_func, &to FUNC, L9 L0, R9 R0)
+        TCOMBO_ACCESS(access_game, &to GAME, L8 L0, R8 R0)
 
         TCOMBO_ACCESS(oneshot_ctrl, &sk LEFT_CONTROL, L11 L8, R11 R8)
         TCOMBO_ACCESS(oneshot_gui, &sk LEFT_GUI, L11 L9, R11 R9)
@@ -313,11 +314,11 @@
             bindings = <
                 &trans          &out OUT_TOG &bt BT_SEL 4 &bt BT_SEL 3
                 &trans          &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
-                &to GAME        &trans       &trans       &to GAME &studio_unlock &bt BT_CLR  
+                &trans          &trans       &trans       &studio_unlock &bt BT_CLR  
 
                 &trans          &out OUT_TOG &bt BT_SEL 4 &bt BT_SEL 3
                 &trans          &bt BT_SEL 2 &bt BT_SEL 1 &bt BT_SEL 0
-                &to GAME        &trans       &trans       &studio_unlock &bt BT_CLR
+                &trans          &trans       &trans       &studio_unlock &bt BT_CLR
             >;
         };
 
