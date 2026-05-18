@@ -26,7 +26,7 @@
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 800
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 7
 
-#define GLOBAL_COMBO_LAYERS BASE SYM NAV MOUSE FUNC NUM SYS
+#define GLOBAL_COMBO_LAYERS BASE SYM NAV MOUSE FUNC SYS
 
 &mmv {
     time-to-max-speed-ms = <300>;
@@ -132,6 +132,7 @@
         TCOMBO(access_nav, &to NAV, L12 L0, R12 R0, GLOBAL_COMBO_LAYERS)
         TCOMBO(access_mouse, &to MOUSE, L11 L0, R11 R0, GLOBAL_COMBO_LAYERS)
         TCOMBO(access_func, &to FUNC, L10 L0, R10 R0, GLOBAL_COMBO_LAYERS)
+        TCOMBO(access_sym, &to SYM, L11 L0, R11 R0, NUM)
 
         TCOMBO(oneshot_ctrl, &sk LEFT_CONTROL, L11 L8, R11 R8, GLOBAL_COMBO_LAYERS)
         TCOMBO(oneshot_gui, &sk LEFT_GUI, L11 L9, R11 R9, GLOBAL_COMBO_LAYERS)
