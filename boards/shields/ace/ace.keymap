@@ -303,13 +303,13 @@
 
         game_1_layer {
             bindings = <
-                &k0_sys SYS BASE &kp Q       &kp W       &kp R
-                &kp F            &kp D       &kp S       &kp A
-                &kp SPACE        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp LEFT_SHIFT
-
-                &k0_sys SYS BASE &kp E       &kp W       &kp Q
+                &k0_sys SYS BASE &kp Q       &kp W       &kp E
                 &kp F            &kp A       &kp S       &kp D
-                &kp SPACE        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp LEFT_SHIFT
+                &kp LEFT_SHIFT        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
+
+                &k0_sys SYS BASE &kp Q       &kp W       &kp E
+                &kp F            &kp A       &kp S       &kp D
+                &kp LEFT_SHIFT        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
             >;
         };
 
@@ -317,11 +317,11 @@
             bindings = <
                 &k0_sys SYS BASE &kp U       &kp I       &kp O
                 &kp P            &kp L       &kp K       &kp J
-                &kp SPACE        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp LEFT_SHIFT
+                &kp LEFT_SHIFT        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
 
-                &k0_sys SYS BASE &kp O       &kp I       &kp U
+                &k0_sys SYS BASE &kp U       &kp I       &kp O
                 &kp P            &kp J       &kp K       &kp L
-                &kp SPACE        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp LEFT_SHIFT
+                &kp LEFT_SHIFT        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
             >;
         };
     };
