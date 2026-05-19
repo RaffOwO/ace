@@ -181,9 +181,9 @@
         TCOMBO(alpha_j, &kp J, L7 L4, R4 R7, BASE)
         TCOMBO(alpha_k, &kp K, L4 L1, R4 R1, BASE)
 
-        TCOMBO(num_4, &kp N4, L1 L5, R3 R7, NUM)
+        TCOMBO(num_4, &kp N4, L3 L7, R3 R7, NUM)
         TCOMBO(num_5, &kp N5, L2 L6, R2 R6, NUM)
-        TCOMBO(num_6, &kp N6, L3 L7, R1 R5, NUM)
+        TCOMBO(num_6, &kp N6, L1 L5, R1 R5, NUM)
         TCOMBO(num_plus, &kp PLUS, L2 L3, R2 R3, NUM)
         TCOMBO(num_minus, &kp MINUS, L1 L2, R1 R2, NUM)
         TCOMBO(num_star, &kp STAR, L6 L7, R6 R7, NUM)
@@ -220,9 +220,9 @@
         TCOMBO(sym_at, &kp AT, L1 L6, R1 R6, SYM)
         TCOMBO(sym_dollar, &kp DLLR, L3 L4, R3 R4, SYM)
 
-        TCOMBO(func_f4, &kp F4, L1 L5, R3 R7, FUNC)
+        TCOMBO(func_f4, &kp F4, L3 L7, R3 R7, FUNC)
         TCOMBO(func_f5, &kp F5, L2 L6, R2 R6, FUNC)
-        TCOMBO(func_f6, &kp F6, L3 L7, R1 R5, FUNC)
+        TCOMBO(func_f6, &kp F6, L1 L5, R1 R5, FUNC)
         TCOMBO(func_f11, &kp F11, L4 L7, R4 R7, FUNC)
         TCOMBO(func_f12, &kp F12, L4 L5, R4 R5, FUNC)
         TCOMBO(func_media_prev, &kp C_PREV, L3 L2, R3 R2, FUNC)
@@ -256,8 +256,8 @@
                 &kp SQT          &kp RBKT    &kp EQUAL   &kp LBKT
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &num_bspc 0 BSPC &mt LEFT_SHIFT SPACE
 
-                &k0_sys SYS BASE &kp LPAR    &kp COLON   &kp RPAR
-                &kp SQT          &kp LBKT    &kp EQUAL   &kp RBKT
+                &k0_sys SYS BASE &kp RPAR    &kp COLON   &kp LPAR
+                &kp SQT          &kp RBKT    &kp EQUAL   &kp LBKT
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &num_bspc 0 BSPC &mt LEFT_SHIFT SPACE
             >;
         };
@@ -265,7 +265,7 @@
         nav_layer {
             bindings = <
                 &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
-                &kp DEL          &kp RIGHT   &kp DOWN    &kp LEFT
+                &kp DEL          &kp LEFT    &kp DOWN    &kp RIGHT
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &num_bspc 0 BSPC &kp LEFT_SHIFT
 
                 &k0_sys SYS BASE &kp END     &kp UP      &kp HOME
@@ -276,9 +276,9 @@
 
         mouse_layer {
             bindings = <
-                &k0_sys SYS BASE &msc MOVE_UP    &mmv MOVE_UP   &msc MOVE_DOWN
-                &trans           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
-                &kp LEFT_CONTROL &kp LEFT_GUI    &mkp MCLK      &mkp RCLK     &mkp LCLK
+                &k0_sys SYS BASE &msc MOVE_UP   &mmv MOVE_UP   &msc MOVE_DOWN
+                &trans           &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT
+                &kp LEFT_CONTROL &kp LEFT_GUI   &mkp MCLK      &mkp RCLK     &mkp LCLK
 
                 &k0_sys SYS BASE &msc MOVE_UP    &mmv MOVE_UP   &msc MOVE_DOWN
                 &trans           &mmv MOVE_RIGHT &mmv MOVE_DOWN &mmv MOVE_LEFT
@@ -288,24 +288,24 @@
 
         func_layer {
             bindings = <
-                &k0_sys SYS BASE &kp F9      &kp F8      &kp F7
-                &kp F10          &kp F3      &kp F2      &kp F1
-                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &num_bspc 0 BSPC &kp LEFT_SHIFT
-
                 &k0_sys SYS BASE &kp F7      &kp F8      &kp F9
                 &kp F10          &kp F1      &kp F2      &kp F3
+                &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &num_bspc 0 BSPC &kp LEFT_SHIFT
+
+                &k0_sys SYS BASE &kp F9      &kp F8      &kp F7
+                &kp F10          &kp F3      &kp F2      &kp F1
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &num_bspc 0 BSPC &kp LEFT_SHIFT
             >;
         };
 
         num_layer {
             bindings = <
-                &to SYM          &kp N9      &kp N8      &kp N7
-                &kp N0           &kp N3      &kp N2      &kp N1
+                &to SYM         &kp N7      &kp N8      &kp N9
+                &kp N0           &kp N1      &kp N2      &kp N3
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
 
-                &to SYM          &kp N7      &kp N8      &kp N9
-                &kp N0           &kp N1      &kp N2      &kp N3
+                &to SYM         &kp N9      &kp N8      &kp N7
+                &kp N0           &kp N3      &kp N2      &kp N1
                 &kp LEFT_CONTROL &kp LEFT_GUI &kp LEFT_ALT &trans      &mt LEFT_SHIFT SPACE
             >;
         };
@@ -324,25 +324,25 @@
 
         game_1_layer {
             bindings = <
-                &k0_sys SYS BASE    &kp Q       &kp W        &kp E
-                &kp F               &kp A       &kp S        &kp D
-                &kp LEFT_SHIFT      &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
+                &k0_sys SYS BASE &kp Q       &kp W       &kp E
+                &kp F            &kp A       &kp S       &kp D
+                &kp LEFT_SHIFT        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
 
-                &k0_sys SYS BASE    &kp Q       &kp W        &kp E
-                &kp F               &kp A       &kp S        &kp D
-                &kp LEFT_SHIFT      &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
+                &k0_sys SYS BASE &kp E       &kp W       &kp Q
+                &kp F            &kp D       &kp S       &kp A
+                &kp LEFT_SHIFT        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
             >;
         };
 
         game_2_layer {
             bindings = <
-                &k0_sys SYS BASE &kp U       &kp I        &kp O
-                &kp P            &kp J       &kp K        &kp L
-                &kp LEFT_SHIFT   &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
+                &k0_sys SYS BASE &kp O       &kp I       &kp U
+                &kp P            &kp J       &kp K       &kp L
+                &kp LEFT_SHIFT        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
 
-                &k0_sys SYS BASE &kp U       &kp I        &kp O
-                &kp P            &kp J       &kp K        &kp L
-                &kp LEFT_SHIFT   &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
+                &k0_sys SYS BASE &kp U       &kp I       &kp O
+                &kp P            &kp J       &kp K       &kp L
+                &kp LEFT_SHIFT        &kp TAB     &kp LEFT_ALT &kp LEFT_CONTROL &kp SPACE
             >;
         };
     };
